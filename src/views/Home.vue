@@ -1,18 +1,36 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <p>¿Qué desea hacer?</p>
+    <nav>
+      <router-link class="link" :to="{ name: 'Buy' }">Comprar criptomonedas</router-link>
+      <router-link class="link" :to="{ name: 'Sell' }">Vender criptomonedas</router-link>
+      <router-link class="link" :to="{ name: 'Transactions' }">
+        Ver, modificar y eliminar las transacciones realizadas
+      </router-link>
+    </nav>
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+<style scoped>
+nav {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.link {
+  padding: 0.3em;
+}
+a {
+  color: #2c3e50;
+}
+a:visited {
+  color: #2c3e50;
+}
+a:hover {
+  color: black;
+}
+a:active {
+  color: #2c3e50;
+}
 
-export default {
-  name: 'Home',
-  components: {
-    HelloWorld,
-  },
-};
-</script>
+</style>

@@ -1,19 +1,58 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import Login from '../views/Login.vue';
 import Home from '../views/Home.vue';
+import Buy from '../views/Buy.vue';
+import Sell from '../views/Sell.vue';
+import Edit from '../views/Edit.vue';
+import Transactions from '../views/Transactions.vue';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
+    meta: { requiresAuth: true },
     component: Home,
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    path: '/login',
+    name: 'Login',
+    meta: { requiresAuth: false },
+    component: Login,
+  },
+  {
+    path: '/buy',
+    name: 'Buy',
+    meta: { requiresAuth: true },
+    component: Buy,
+  },
+  {
+    path: '/sell',
+    name: 'Sell',
+    meta: { requiresAuth: true },
+    component: Sell,
+  },
+  {
+    path: '/transactions',
+    name: 'Transactions',
+    meta: { requiresAuth: true },
+    component: Transactions,
+  },
+  {
+    path: '/edit',
+    name: 'Edit',
+    meta: { requiresAuth: true },
+    component: Edit,
+  },
+  {
+    path: '/404',
+    name: 'NotFound',
+    meta: { requiresAuth: false },
+    component: () => import('../views/404.vue'),
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    meta: { requiresAuth: false },
+    redirect: '/404',
   },
 ];
 

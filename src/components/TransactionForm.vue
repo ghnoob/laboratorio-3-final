@@ -31,7 +31,7 @@
         </li>
         <li class="form-row">
           <label for="money">Dinero que se {{ moneyLabel }} (ARS)</label>
-          <input id="money" type="number" min="0" step="any" v-model="transaction.money" required>
+          <input id="money" type="number" min="0" step="0.01" v-model="transaction.money" required>
         </li>
         <li class="form-row">
           <label for="date">Fecha</label>
@@ -79,7 +79,9 @@ export default {
     return {
       date: this.todaysDate(),
       time: this.currentTime(),
-      transaction: {
+      oldTransaction: {},
+      newTransaction: {
+        _id: null,
         user_id: '',
         action: this.action,
         crypto_code: '',
@@ -91,11 +93,12 @@ export default {
   },
   mounted() {
     if (this.action === undefined) {
-      const elem = this.$store.state.transactions.find((x) => x._id === this.id);
-      this.transaction = elem;
-      this.datetime = elem.datetime;
+      this.oldTransaction = this.$store.state.transactions.find((x) => x._id === this.id);
+      this.newTransaction = this.oldTransaction;
+      this.datetime = new Date(this.newTransaction.datetime);
     } else {
-      this.transaction.user_id = this.$store.state.username;
+      this.newTransaction.user_id = this.$store.state.username;
+      this.newTransaction.datetime = this.datetime;
     }
   },
   methods: {
@@ -103,14 +106,14 @@ export default {
       const date = new Date();
       const year = date.getFullYear();
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate();
+      const day = date.getDate().toString().padStart(2, '0');
 
       return `${year}-${month}-${day}`;
     },
     currentTime() {
       const date = new Date();
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
       return `${hours}:${minutes}`;
     },
   },
@@ -119,24 +122,27 @@ export default {
       get() {
         return `${this.date} ${this.time}`.trim();
       },
-      set(newValue) {
-        const dt = newValue.split('T');
-        dt[1] = dt[1].slice(0, 5);
-        [this.date, this.time] = [dt[0], dt[1]];
+      set(dt) {
+        const month = (dt.getMonth() + 1).toString().padStart(2, '0');
+        const day = dt.getDate().toString().padStart(2, '0');
+        this.date = `${dt.getFullYear()}-${month}-${day}`;
+        this.time = `${dt.getHours()}:${dt.getMinutes()}`;
       },
     },
     moneyLabel() {
-      if (this.transaction.action === 'purchase') return 'pagó';
+      if (this.newTransaction.action === 'purchase') return 'pagó';
       return 'recibió';
     },
     maxCryptoAmount() {
-      if (this.transaction.action === 'sale') {
-        return this.$store.getters.wallet[this.transaction.crypto_code];
-      }
-      return Number.MAX_SAFE_INTEGER;
+      const inWallet = this.$store.getters.wallet[this.newTransaction.crypto_code];
+
+      if (this.action === 'sale') return inWallet;
+      if (this.action === 'purchase') return Number.MAX_SAFE_INTEGER;
+
+      return inWallet + parseFloat(this.oldTransaction.crypto_amount);
     },
     maxCryptoLabel() {
-      if (this.transaction.action === 'sale' && this.maxCryptoAmount !== undefined) {
+      if (this.newTransaction.action === 'sale') {
         return ` (max. ${this.maxCryptoAmount})`;
       }
       return '';
@@ -147,7 +153,7 @@ export default {
   },
   watch: {
     datetime(value) {
-      this.transaction.datetime = new Date(value).toISOString();
+      this.newTransaction.datetime = new Date(value).toISOString();
     },
   },
 };

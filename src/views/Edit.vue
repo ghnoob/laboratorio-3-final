@@ -5,13 +5,15 @@
 
 <script>
 import TransactionForm from '@/components/TransactionForm.vue';
+import apiServices from '@/services/apiServices.js';
 
 export default {
   components: {
     TransactionForm,
   },
   methods: {
-    edit(transaction) {
+    async edit(transaction) {
+      await apiServices.patchTransaction(transaction._id, transaction);
       this.$store.commit('editTransaction', transaction);
       this.$router.push({ name: 'Transactions' });
     },

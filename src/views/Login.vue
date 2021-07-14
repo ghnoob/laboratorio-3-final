@@ -23,6 +23,7 @@ export default {
   methods: {
     onSubmit() {
       this.$store.commit('setUsername', this.username);
+      this.$store.dispatch('pullTransactions');
       this.$router.push({ name: 'Home' });
     },
   },

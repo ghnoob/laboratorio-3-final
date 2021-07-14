@@ -14,7 +14,7 @@
       <tbody>
         <tr
           v-for="transaction in transactions"
-          :key="transaction.id"
+          :key="transaction._id"
           @click="rowClick(transaction._id)"
           :class="{ selected: selectedId === transaction._id }"
         >
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import apiServices from '@/services/apiServices.js';
+
 export default {
   data() {
     return {
@@ -74,7 +76,8 @@ export default {
     getLocalizedDateTime(isoTime) {
       return new Date(isoTime).toLocaleString();
     },
-    deleteTransaction() {
+    async deleteTransaction() {
+      await apiServices.deleteTransaction(this.selectedId);
       this.$store.commit('deleteTransaction', this.selectedId);
     },
   },

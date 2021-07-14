@@ -1,56 +1,24 @@
 import { createStore } from 'vuex';
+import apiServices from '../services/apiServices';
 
 export default createStore({
-  state: {
-    username: '',
-    // TODO: buscar datos de la API
-    transactions: [
-      {
-        _id: '60eb148da4666761000216f9',
-        crypto_code: 'usdc',
-        crypto_amount: '1.01',
-        money: '165.23',
-        user_id: 'valor_introducido_login',
-        action: 'purchase',
-        datetime: '2021-11-07T17:50:00.000Z',
-      },
-      {
-        _id: '60eb149ba4666761000216fc',
-        crypto_code: 'usdc',
-        crypto_amount: '1.01',
-        money: '170.98',
-        user_id: 'valor_introducido_login',
-        action: 'sale',
-        datetime: '2021-11-07T20:50:00.000Z',
-      },
-      {
-        _id: '60eb148da4666761000216f7',
-        crypto_code: 'btc',
-        crypto_amount: '0.01',
-        money: '58447',
-        user_id: 'valor_introducido_login',
-        action: 'purchase',
-        datetime: '2021-11-11T17:50:00.000Z',
-      },
-      {
-        _id: '60eb148da4666761000216f5',
-        crypto_code: 'btc',
-        crypto_amount: '0.02',
-        money: '116894',
-        user_id: 'valor_introducido_login',
-        action: 'purchase',
-        datetime: '2021-11-12T17:50:00.000Z',
-      },
-    ],
-    cryptoCodes: [
-      { code: 'btc', name: 'Bitcoin' },
-      { code: 'usdc', name: 'USD Coin' },
-      { code: 'eth', name: 'Ethereum' },
-    ],
+  state() {
+    return {
+      username: '',
+      transactions: [],
+      cryptoCodes: [
+        { code: 'btc', name: 'Bitcoin' },
+        { code: 'eth', name: 'Ethereum' },
+        { code: 'usdc', name: 'USD Coin' },
+      ],
+    };
   },
   mutations: {
     setUsername(state, name) {
       state.username = name;
+    },
+    setTransactions(state, arr) {
+      state.transactions = arr;
     },
     pushTransaction(state, transaction) {
       state.transactions.push(transaction);
@@ -61,6 +29,12 @@ export default createStore({
     },
     deleteTransaction(state, id) {
       state.transactions = state.transactions.filter((elem) => elem._id !== id);
+    },
+  },
+  actions: {
+    async pullTransactions({ commit, state }) {
+      const response = await apiServices.getTransactions(state.username);
+      commit('setTransactions', response.data);
     },
   },
   getters: {

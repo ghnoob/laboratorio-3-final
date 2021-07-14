@@ -25,7 +25,7 @@ export default createStore({
       },
       {
         _id: '60eb148da4666761000216f7',
-        crypto_code: 'bitcoin',
+        crypto_code: 'btc',
         crypto_amount: '0.01',
         money: '58447',
         user_id: 'valor_introducido_login',
@@ -34,13 +34,18 @@ export default createStore({
       },
       {
         _id: '60eb148da4666761000216f5',
-        crypto_code: 'bitcoin',
+        crypto_code: 'btc',
         crypto_amount: '0.02',
         money: '116894',
         user_id: 'valor_introducido_login',
         action: 'purchase',
         datetime: '2021-11-12T17:50:00.000Z',
       },
+    ],
+    cryptoCodes: [
+      { code: 'btc', name: 'Bitcoin' },
+      { code: 'usdc', name: 'USD Coin' },
+      { code: 'eth', name: 'Ethereum' },
     ],
   },
   mutations: {
@@ -63,12 +68,11 @@ export default createStore({
       return state.username.length > 0;
     },
     wallet(state) {
-      const wallet = {
-        bitcoin: 0,
-        eth: 0,
-        usdc: 0,
-        doge: 0,
-      };
+      const wallet = {};
+
+      state.cryptoCodes.forEach((item) => {
+        wallet[item.code] = 0;
+      });
 
       state.transactions.forEach((item) => {
         const amount = parseFloat(item.crypto_amount);

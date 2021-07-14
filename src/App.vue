@@ -7,6 +7,8 @@
       <nav id="nav">
         <router-link :to="{ name: 'Home' }">Home</router-link> |
         <router-link :to="{ name: 'Transactions' }">Transacciones</router-link> |
+        <router-link :to="{ name: 'Wallet' }">Billetera</router-link> |
+        <router-link :to="{ name: 'Results' }">Resultados</router-link> |
         <router-link :to="{ name: 'Login' }">Cerrar sesión</router-link>
       </nav>
     </div>
@@ -100,5 +102,65 @@ button[disabled]:active {
 }
 .username {
   text-align: right;
+}
+
+table.green-table {
+  border: 2px solid #24943a;
+  background-color: #d4eed1;
+  text-align: center;
+  margin: auto;
+  cursor: default;
+}
+
+table.green-table td,
+table.green-table th {
+  border: 1px solid #24943a;
+  padding: 3px 2px;
+}
+
+table.green-table tbody td {
+  font-size: 13px;
+}
+
+table.green-table thead {
+  background: #24943a;
+  background: -moz-linear-gradient(top, #5baf6b 0%, #3a9e4d 66%, #24943a 100%);
+  background: -webkit-linear-gradient(
+    top,
+    #5baf6b 0%,
+    #3a9e4d 66%,
+    #24943a 100%
+  );
+  background: linear-gradient(to bottom, #5baf6b 0%, #3a9e4d 66%, #24943a 100%);
+  border-bottom: 0px solid #444444;
+}
+
+table.green-table thead th {
+  font-size: 19px;
+  font-weight: bold;
+  color: #f0f0f0;
+  text-align: left;
+  border-left: 2px solid #24943a;
+}
+
+table.green-table thead th:first-child {
+  border-left: none;
+}
+
+table.green-table tfoot tr td {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+table.green-table tfoot .links {
+  text-align: right;
+}
+
+table.green-table tfoot .links a {
+  display: inline-block;
+  background: #ffffff;
+  color: #24943a;
+  padding: 2px 8px;
+  border-radius: 5px;
 }
 </style>

@@ -1,11 +1,16 @@
 <template>
   <div class="home">
-    <p>¿Qué desea hacer?</p>
+    <h1>Inicio</h1>
+    <h2>¿Qué desea hacer?</h2>
     <nav>
       <router-link class="link" :to="{ name: 'Buy' }">Comprar criptomonedas</router-link>
       <router-link class="link" :to="{ name: 'Sell' }">Vender criptomonedas</router-link>
       <router-link class="link" :to="{ name: 'Transactions' }">
         Ver, modificar y eliminar las transacciones realizadas
+      </router-link>
+      <router-link :to="{ name: 'Wallet' }">Consultar los fondos disponibles</router-link>
+      <router-link :to="{ name: 'Results' }">
+        Consultar los resultados de las inversiones
       </router-link>
     </nav>
   </div>

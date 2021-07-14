@@ -1,4 +1,5 @@
 <template>
+  <h1>Transacciones</h1>
   <div v-if="transactions.length > 0">
     <table class="green-table">
       <thead>
@@ -17,7 +18,7 @@
           @click="rowClick(transaction._id)"
           :class="{ selected: selectedId === transaction._id }"
         >
-          <td>{{ transaction.crypto_code.toUpperCase() }}</td>
+          <td>{{ getCryptoName(transaction.crypto_code) }}</td>
           <td>{{ transaction.crypto_amount }}</td>
           <td>{{ transaction.money }}</td>
           <td>{{ getAction(transaction.action) }}</td>
@@ -63,6 +64,9 @@ export default {
       if (id !== this.selectedId) this.selectedId = id;
       else this.selectedId = null;
     },
+    getCryptoName(code) {
+      return this.cryptoList.find((item) => item.code === code).name;
+    },
     getAction(action) {
       if (action === 'purchase') return 'Compra';
       return 'Venta';
@@ -79,71 +83,14 @@ export default {
     transactions() {
       return this.$store.state.transactions;
     },
+    cryptoList() {
+      return this.$store.state.cryptoCodes;
+    },
   },
 };
 </script>
 
 <style scoped>
-table.green-table {
-  border: 2px solid #24943a;
-  background-color: #d4eed1;
-  width: 75%;
-  text-align: center;
-  margin: auto;
-  cursor: default;
-}
-
-table.green-table td,
-table.green-table th {
-  border: 1px solid #24943a;
-  padding: 3px 2px;
-}
-
-table.green-table tbody td {
-  font-size: 13px;
-}
-
-table.green-table thead {
-  background: #24943a;
-  background: -moz-linear-gradient(top, #5baf6b 0%, #3a9e4d 66%, #24943a 100%);
-  background: -webkit-linear-gradient(
-    top,
-    #5baf6b 0%,
-    #3a9e4d 66%,
-    #24943a 100%
-  );
-  background: linear-gradient(to bottom, #5baf6b 0%, #3a9e4d 66%, #24943a 100%);
-  border-bottom: 0px solid #444444;
-}
-
-table.green-table thead th {
-  font-size: 19px;
-  font-weight: bold;
-  color: #f0f0f0;
-  text-align: left;
-  border-left: 2px solid #24943a;
-}
-
-table.green-table thead th:first-child {
-  border-left: none;
-}
-
-table.green-table tfoot td {
-  font-size: 13px;
-}
-
-table.green-table tfoot .links {
-  text-align: right;
-}
-
-table.green-table tfoot .links a {
-  display: inline-block;
-  background: #ffffff;
-  color: #24943a;
-  padding: 2px 8px;
-  border-radius: 5px;
-}
-
 .buttons-container {
   width: max-content;
   display: flex;

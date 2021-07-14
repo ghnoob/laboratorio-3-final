@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <h1>Iniciar sesión</h1>
     <form @submit.prevent="onSubmit">
       <input placeholder="Usuario" v-model.trim="username" required>
       <button type="submit">Iniciar sesión</button>
@@ -33,6 +34,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-flow: column wrap;
   height: 100%;
 }
 
@@ -44,6 +46,6 @@ export default {
 }
 
 input {
-  height: 100%;
+  height: auto;
 }
 </style>

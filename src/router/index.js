@@ -5,6 +5,8 @@ import Buy from '../views/Buy.vue';
 import Sell from '../views/Sell.vue';
 import Edit from '../views/Edit.vue';
 import Transactions from '../views/Transactions.vue';
+import Wallet from '../views/Wallet.vue';
+import Results from '../views/Results.vue';
 
 const routes = [
   {
@@ -42,6 +44,18 @@ const routes = [
     name: 'Edit',
     meta: { requiresAuth: true },
     component: Edit,
+  },
+  {
+    path: '/wallet',
+    name: 'Wallet',
+    meta: { requiresAuth: true },
+    component: Wallet,
+  },
+  {
+    path: '/results',
+    name: 'Results',
+    meta: { requiresAuth: true },
+    component: Results,
   },
   {
     path: '/404',

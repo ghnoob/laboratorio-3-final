@@ -12,10 +12,9 @@
         <li class="form-row">
           <label for="crypto-code">Criptomoneda</label>
           <select id="crypto-code" v-model="transaction.crypto_code" required>
-            <option value="bitcoin">Bitcoin</option>
-            <option value="eth">Ethereum</option>
-            <option value="usdc">USD Coin</option>
-            <option value="doge">Dogecoin</option>
+            <option v-for="crypto in cryptoList" :key="crypto.code" :value="crypto.code">
+              {{ crypto.name }}
+            </option>
           </select>
         </li>
         <li class="form-row">
@@ -79,7 +78,7 @@ export default {
   data() {
     return {
       date: this.todaysDate(),
-      time: '',
+      time: this.currentTime(),
       transaction: {
         user_id: '',
         action: this.action,
@@ -108,6 +107,12 @@ export default {
 
       return `${year}-${month}-${day}`;
     },
+    currentTime() {
+      const date = new Date();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      return `${hours}:${minutes}`;
+    },
   },
   computed: {
     datetime: {
@@ -135,6 +140,9 @@ export default {
         return ` (max. ${this.maxCryptoAmount})`;
       }
       return '';
+    },
+    cryptoList() {
+      return this.$store.state.cryptoCodes;
     },
   },
   watch: {

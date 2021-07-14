@@ -5,7 +5,7 @@
 
 <script>
 import TransactionForm from '@/components/TransactionForm.vue';
-import apiServices from '@/services/apiServices.js';
+import apiServices from '@/services/apiServices';
 
 export default {
   components: {

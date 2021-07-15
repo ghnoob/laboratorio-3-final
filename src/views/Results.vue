@@ -57,7 +57,7 @@ export default {
           else spendings += parseFloat(op.money);
         });
 
-        const amountInWallet = this.$store.getters.wallet[item.code];
+        const amountInWallet = this.wallet[item.code];
         if (amountInWallet > 0) {
           const response = await axios.get(`https://criptoya.com/api/satoshitango/${item.code}/ars`);
           currentValue = response.data.totalBid * amountInWallet;
@@ -78,6 +78,24 @@ export default {
     },
     totalResults() {
       return this.tableData.reduce((a, b) => a + b.result, 0);
+    },
+    wallet() {
+      const wallet = {};
+
+      this.$store.state.cryptoCodes.forEach((item) => {
+        wallet[item.code] = 0;
+      });
+
+      this.$store.state.transactions.forEach((item) => {
+        const amount = parseFloat(item.crypto_amount);
+        if (item.action === 'purchase') {
+          wallet[item.crypto_code] += amount;
+        } else {
+          wallet[item.crypto_code] -= amount;
+        }
+      });
+
+      return wallet;
     },
   },
 };

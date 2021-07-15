@@ -1,5 +1,5 @@
 <template>
-  <h1>Billetera</h1>
+  <h1>Cartera</h1>
   <div v-if="availableCryptos.length > 0">
     <table class="green-table">
       <thead>
@@ -24,14 +24,22 @@
         </tr>
       </tfoot>
     </table>
+    <div class="chart-container" v-if="renderChart">
+      <h2>Composición de la cartera</h2>
+      <wallet-chart :chart-data="chartData" :chart-options="{ responsive: true }" />
+    </div>
   </div>
   <p v-else>La cartera está vacía.</p>
 </template>
 
 <script>
 import axios from 'axios';
+import WalletChart from '@/components/WalletChart.vue';
 
 export default {
+  components: {
+    WalletChart,
+  },
   data() {
     return {
       tableData: [],
@@ -59,7 +67,22 @@ export default {
   },
   computed: {
     wallet() {
-      return this.$store.getters.wallet;
+      const wallet = {};
+
+      this.$store.state.cryptoCodes.forEach((item) => {
+        wallet[item.code] = 0;
+      });
+
+      this.$store.state.transactions.forEach((item) => {
+        const amount = parseFloat(item.crypto_amount);
+        if (item.action === 'purchase') {
+          wallet[item.crypto_code] += amount;
+        } else {
+          wallet[item.crypto_code] -= amount;
+        }
+      });
+
+      return wallet;
     },
     availableCryptos() {
       return Object.keys(this.wallet).filter((item) => this.wallet[item] > 0);
@@ -70,6 +93,29 @@ export default {
     moneyTotal() {
       return this.tableData.reduce((a, b) => a + b.value, 0);
     },
+    chartData() {
+      return {
+        datasets: [
+          {
+            data: this.tableData.map((item) => item.value),
+            // eslint-disable-next-line
+            backgroundColor: this.tableData.map((item) => this.cryptoList.find((crypto) => crypto.code === item.code).color),
+          },
+        ],
+        labels: this.tableData.map((item) => item.name),
+      };
+    },
+    renderChart() {
+      return this.tableData.length > 0 && this.tableData.every((crypto) => crypto.value > 0);
+    },
   },
 };
 </script>
+
+<style scoped>
+.chart-container {
+  max-width: 35%;
+  margin: auto;
+  margin-top: 5em;
+}
+</style>

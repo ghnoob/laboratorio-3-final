@@ -7,9 +7,9 @@ export default createStore({
       username: '',
       transactions: [],
       cryptoCodes: [
-        { code: 'btc', name: 'Bitcoin' },
-        { code: 'eth', name: 'Ethereum' },
-        { code: 'usdc', name: 'USD Coin' },
+        { code: 'btc', name: 'Bitcoin', color: '#ff9315' },
+        { code: 'eth', name: 'Ethereum', color: '#5b73a0' },
+        { code: 'usdc', name: 'USD Coin', color: '#2775ca' },
       ],
     };
   },
@@ -40,24 +40,6 @@ export default createStore({
   getters: {
     isLoggedIn(state) {
       return state.username.length > 0;
-    },
-    wallet(state) {
-      const wallet = {};
-
-      state.cryptoCodes.forEach((item) => {
-        wallet[item.code] = 0;
-      });
-
-      state.transactions.forEach((item) => {
-        const amount = parseFloat(item.crypto_amount);
-        if (item.action === 'purchase') {
-          wallet[item.crypto_code] += amount;
-        } else {
-          wallet[item.crypto_code] -= amount;
-        }
-      });
-
-      return wallet;
     },
   },
 });

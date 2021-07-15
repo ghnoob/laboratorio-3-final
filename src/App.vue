@@ -7,7 +7,7 @@
       <nav id="nav">
         <router-link :to="{ name: 'Home' }">Home</router-link> |
         <router-link :to="{ name: 'Transactions' }">Transacciones</router-link> |
-        <router-link :to="{ name: 'Wallet' }">Billetera</router-link> |
+        <router-link :to="{ name: 'Wallet' }">Cartera</router-link> |
         <router-link :to="{ name: 'Results' }">Resultados</router-link> |
         <router-link :to="{ name: 'Login' }">Cerrar sesión</router-link>
       </nav>

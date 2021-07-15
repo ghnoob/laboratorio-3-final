@@ -1,17 +1,17 @@
 <template>
   <div class="transaction">
-    <form @submit.prevent="$emit('submitted', transaction)">
+    <form @submit.prevent="$emit('submitted', newTransaction)">
       <ul class="wrapper">
         <li class="form-row" v-if="edit">
           <label for="action">Acción</label>
-          <select id="action" v-model="transaction.action">
+          <select id="action" v-model="newTransaction.action">
             <option value="purchase">Comprar</option>
             <option value="sale">Vender</option>
           </select>
         </li>
         <li class="form-row">
           <label for="crypto-code">Criptomoneda</label>
-          <select id="crypto-code" v-model="transaction.crypto_code" required>
+          <select id="crypto-code" v-model="newTransaction.crypto_code" required>
             <option v-for="crypto in cryptoList" :key="crypto.code" :value="crypto.code">
               {{ crypto.name }}
             </option>
@@ -25,13 +25,20 @@
             min="0"
             :max="maxCryptoAmount"
             step="any"
-            v-model="transaction.crypto_amount"
+            v-model="newTransaction.crypto_amount"
             required
           >
         </li>
         <li class="form-row">
           <label for="money">Dinero que se {{ moneyLabel }} (ARS)</label>
-          <input id="money" type="number" min="0" step="0.01" v-model="transaction.money" required>
+          <input
+            id="money"
+            type="number"
+            min="0"
+            step="0.01"
+            v-model="newTransaction.money"
+            required
+          >
         </li>
         <li class="form-row">
           <label for="date">Fecha</label>

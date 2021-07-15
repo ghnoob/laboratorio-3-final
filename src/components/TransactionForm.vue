@@ -57,7 +57,9 @@
         </li>
         <li class="form-row">
           <button type="submit">Aceptar</button>
-          <button type="button" @click="$router.go(-1)">Cancelar</button>
+          <router-link :to="{ name: 'Transactions' }">
+            <button type="button">Cancelar</button>
+          </router-link>
         </li>
       </ul>
     </form>
@@ -100,8 +102,8 @@ export default {
   },
   mounted() {
     if (this.action === undefined) {
-      this.oldTransaction = this.$store.state.transactions.find((x) => x._id === this.id);
-      this.newTransaction = this.oldTransaction;
+      this.oldTransaction = { ...this.$store.state.transactions.find((x) => x._id === this.id) };
+      this.newTransaction = { ...this.oldTransaction };
       this.datetime = new Date(this.newTransaction.datetime);
     } else {
       this.newTransaction.user_id = this.$store.state.username;

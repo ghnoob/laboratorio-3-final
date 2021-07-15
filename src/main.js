@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import Toaster from '@meforma/vue-toaster';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -15,4 +16,8 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-createApp(App).use(store).use(router).mount('#app');
+const app = createApp(App);
+app.use(store);
+app.use(router);
+app.use(Toaster);
+app.mount('#app');

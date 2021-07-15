@@ -31,6 +31,14 @@ export default {
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;
     },
+    transactions() {
+      return this.$store.state.transactions;
+    },
+  },
+  watch: {
+    transactions() {
+      this.$toast.clear();
+    },
   },
 };
 </script>

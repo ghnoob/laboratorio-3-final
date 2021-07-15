@@ -13,9 +13,16 @@ export default {
   },
   methods: {
     async edit(transaction) {
-      await apiServices.patchTransaction(transaction._id, transaction);
-      this.$store.commit('editTransaction', transaction);
-      this.$router.push({ name: 'Transactions' });
+      try {
+        this.$toast.show('Modificando...');
+        await apiServices.patchTransaction(transaction._id, transaction);
+        this.$store.commit('editTransaction', transaction);
+        this.$router.push({ name: 'Transactions' });
+        this.$toast.clear();
+      } catch {
+        this.$toast.clear();
+        this.$toast.error('Error', { duration: 2000 });
+      }
     },
   },
   computed: {

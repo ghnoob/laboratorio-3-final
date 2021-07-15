@@ -77,8 +77,15 @@ export default {
       return new Date(isoTime).toLocaleString();
     },
     async deleteTransaction() {
-      await apiServices.deleteTransaction(this.selectedId);
-      this.$store.commit('deleteTransaction', this.selectedId);
+      try {
+        this.$toast.show('Eliminando...');
+        await apiServices.deleteTransaction(this.selectedId);
+        this.$store.commit('deleteTransaction', this.selectedId);
+        this.$toast.clear();
+      } catch {
+        this.$toast.clear();
+        this.$toast.error('Error', { duration: 2000 });
+      }
     },
   },
 

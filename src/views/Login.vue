@@ -18,10 +18,12 @@ export default {
 
   created() {
     this.$store.commit('setUsername', '');
+    this.$store.commit('setTransactions', []);
   },
 
   methods: {
     onSubmit() {
+      this.$toast.show('Cargando...');
       this.$store.commit('setUsername', this.username);
       this.$store.dispatch('pullTransactions');
       this.$router.push({ name: 'Home' });

@@ -143,7 +143,7 @@ export default {
       return 'recibió';
     },
     maxCryptoAmount() {
-      const inWallet = this.$store.getters.wallet[this.newTransaction.crypto_code];
+      const inWallet = this.wallet[this.newTransaction.crypto_code];
 
       if (this.action === 'sale') return inWallet;
       if (this.action === 'purchase') return Number.MAX_SAFE_INTEGER;
@@ -158,6 +158,24 @@ export default {
     },
     cryptoList() {
       return this.$store.state.cryptoCodes;
+    },
+    wallet() {
+      const wallet = {};
+
+      this.$store.state.cryptoCodes.forEach((item) => {
+        wallet[item.code] = 0;
+      });
+
+      this.$store.state.transactions.forEach((item) => {
+        const amount = parseFloat(item.crypto_amount);
+        if (item.action === 'purchase') {
+          wallet[item.crypto_code] += amount;
+        } else {
+          wallet[item.crypto_code] -= amount;
+        }
+      });
+
+      return wallet;
     },
   },
   watch: {

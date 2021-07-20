@@ -24,6 +24,9 @@
 
 <script>
 export default {
+  mounted() {
+    this.$store.commit('setPrices');
+  },
   computed: {
     username() {
       return this.$store.state.username;

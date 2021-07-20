@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import axios from 'axios';
 import apiServices from '../services/apiServices';
 
 export default createStore({
@@ -11,6 +12,7 @@ export default createStore({
         { code: 'eth', name: 'Ethereum', color: '#5b73a0' },
         { code: 'usdc', name: 'USD Coin', color: '#2775ca' },
       ],
+      prices: [],
     };
   },
   mutations: {
@@ -19,6 +21,18 @@ export default createStore({
     },
     setTransactions(state, arr) {
       state.transactions = arr;
+    },
+    setPrices(state) {
+      state.prices = state.cryptoCodes.map((item) => ({ code: item.code, exchanges: [] }));
+      state.prices.forEach(async (item) => {
+        const response = await axios.get(`https://criptoya.com/api/${item.code}/ars`);
+        item.exchanges = Object.keys(response.data).map((exchange) => (
+          {
+            exchange,
+            bid: response.data[exchange].totalBid,
+            ask: response.data[exchange].totalAsk,
+          }));
+      });
     },
     pushTransaction(state, transaction) {
       state.transactions.push(transaction);

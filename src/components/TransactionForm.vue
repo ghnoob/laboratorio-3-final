@@ -11,7 +11,11 @@
         </li>
         <li class="form-row">
           <label for="crypto-code">Criptomoneda</label>
-          <select id="crypto-code" v-model="newTransaction.crypto_code" required>
+          <select
+            id="crypto-code"
+            v-model="newTransaction.crypto_code"
+            required
+          >
             <option v-for="crypto in cryptoList" :key="crypto.code" :value="crypto.code">
               {{ crypto.name }}
             </option>
@@ -27,7 +31,22 @@
             step="any"
             v-model="newTransaction.crypto_amount"
             required
+            @input="setMoney"
           >
+        </li>
+        <li class="form-row" v-if="newTransaction.crypto_code !== ''">
+          <label for="exchange">Exchange</label>
+          <select id="exchange" v-model="exchangeRate" @change="setMoney">
+            <option
+              v-for="(item, i) in prices"
+              :key="item.exchange"
+              :value="item[priceType]"
+            >
+              {{ item.exchange }} - 1 ARS = {{ item[priceType] }}
+              {{ newTransaction.crypto_code.toUpperCase() }}{{i === 0 ? ' (recomendado)' : ''}}
+            </option>
+            <option :value="null">otro</option>
+          </select>
         </li>
         <li class="form-row">
           <label for="money">Dinero que se {{ moneyLabel }} (ARS)</label>
@@ -56,6 +75,7 @@
           <input id="time" type="time" v-model="time" autocomplete="off" required>
         </li>
         <li class="form-row">
+          <button type="button" @click="$store.commit('setPrices')">Refrescar exchanges</button>
           <button type="submit">Aceptar</button>
           <router-link :to="{ name: 'Transactions' }">
             <button type="button">Cancelar</button>
@@ -88,6 +108,7 @@ export default {
     return {
       date: this.todaysDate(),
       time: this.currentTime(),
+      exchangeRate: null,
       oldTransaction: {},
       newTransaction: {
         _id: null,
@@ -124,6 +145,12 @@ export default {
       const hours = date.getHours().toString().padStart(2, '0');
       const minutes = date.getMinutes().toString().padStart(2, '0');
       return `${hours}:${minutes}`;
+    },
+    setMoney() {
+      if (this.exchangeRate !== null) {
+        const newVal = (this.exchangeRate * this.newTransaction.crypto_amount).toFixed(2);
+        this.newTransaction.money = newVal;
+      }
     },
   },
   computed: {
@@ -177,16 +204,41 @@ export default {
 
       return wallet;
     },
+    prices() {
+      if (this.newTransaction.crypto_code !== '') {
+        const predicate = (item) => item.code === this.newTransaction.crypto_code;
+        const priceList = [...this.$store.state.prices.find(predicate).exchanges];
+        if (this.newTransaction.action === 'purchase') {
+          priceList.sort((a, b) => a.ask - b.ask);
+        } else {
+          priceList.sort((a, b) => a.bid - b.bid);
+          priceList.reverse();
+        }
+        return priceList;
+      }
+      return [];
+    },
+    priceType() {
+      return this.newTransaction.action === 'purchase' ? 'ask' : 'bid';
+    },
   },
   watch: {
     datetime(value) {
       this.newTransaction.datetime = new Date(value).toISOString();
     },
+    prices(newPrices) {
+      if (newPrices.length < 1) {
+        this.$toast.show('Refrescando...');
+      } else {
+        this.exchangeRate = newPrices[0][this.priceType];
+        this.$toast.clear();
+        this.setMoney();
+      }
+    },
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .wrapper {
   background-color: whitesmoke;
@@ -203,7 +255,7 @@ export default {
 button {
   margin: 2px;
   width: 80px;
-  height: 30px;
+  height: 50px;
   padding: 0.5em;
 }
 

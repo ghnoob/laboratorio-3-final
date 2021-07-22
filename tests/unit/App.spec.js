@@ -127,7 +127,7 @@ describe('App.vue', () => {
   });
 
   describe('Habiendo ingresado', () => {
-    it('Si el usuario ingresó se muestran los links para navegar libremente por la página', () => {
+    it('Se muestran los links para navegar libremente por la página', () => {
       const $store = {
         state: { transactions: [], username: 'test' },
         commit: jest.fn(),

@@ -15,7 +15,7 @@ export default {
     async edit(transaction) {
       try {
         this.$toast.show('Modificando...');
-        await apiServices.patchTransaction(transaction._id, transaction);
+        await apiServices.patchTransaction(transaction);
         this.$store.commit('editTransaction', transaction);
         this.$router.push({ name: 'Transactions' });
         this.$toast.clear();

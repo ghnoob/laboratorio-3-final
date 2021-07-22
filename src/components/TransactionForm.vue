@@ -122,7 +122,7 @@ export default {
     };
   },
   mounted() {
-    if (this.action === undefined) {
+    if (this.edit) {
       this.oldTransaction = { ...this.$store.state.transactions.find((x) => x._id === this.id) };
       this.newTransaction = { ...this.oldTransaction };
       this.datetime = new Date(this.newTransaction.datetime);

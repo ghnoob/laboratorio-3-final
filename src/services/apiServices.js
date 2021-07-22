@@ -12,8 +12,8 @@ export default {
   postTransaction(transaction) {
     return apiClient.post('/transactions', transaction);
   },
-  patchTransaction(id, transaction) {
-    return apiClient.patch(`/transactions/${id}`, transaction);
+  patchTransaction(transaction) {
+    return apiClient.patch(`/transactions/${transaction._id}`, transaction);
   },
   deleteTransaction(id) {
     return apiClient.delete(`/transactions/${id}`);

@@ -1,19 +1,19 @@
 <template>
   <div class="content">
-    <div v-if="isLoggedIn">
+    <div v-if="username.length > 0">
       <header>
         <p class="username">{{ username }}</p>
       </header>
       <nav id="nav">
-        <router-link :to="{ name: 'Home' }">Home</router-link> |
-        <router-link :to="{ name: 'Transactions' }">Transacciones</router-link> |
-        <router-link :to="{ name: 'Wallet' }">Cartera</router-link> |
-        <router-link :to="{ name: 'Results' }">Resultados</router-link> |
-        <router-link :to="{ name: 'Login' }">Cerrar sesión</router-link>
+        <router-link class="link" :to="{ name: 'Home' }">Home</router-link> |
+        <router-link class="link" :to="{ name: 'Transactions' }">Transacciones</router-link> |
+        <router-link class="link" :to="{ name: 'Wallet' }">Cartera</router-link> |
+        <router-link class="link" :to="{ name: 'Results' }">Resultados</router-link> |
+        <router-link class="link" :to="{ name: 'Login' }">Cerrar sesión</router-link>
       </nav>
     </div>
     <nav id="nav" v-else-if="$route.name !== 'Login'">
-      <router-link :to="{ name: 'Login' }">Iniciar sesión</router-link>
+      <router-link class="link" :to="{ name: 'Login' }">Iniciar sesión</router-link>
     </nav>
     <router-view/>
   </div>
@@ -30,9 +30,6 @@ export default {
   computed: {
     username() {
       return this.$store.state.username;
-    },
-    isLoggedIn() {
-      return this.$store.getters.isLoggedIn;
     },
     transactions() {
       return this.$store.state.transactions;

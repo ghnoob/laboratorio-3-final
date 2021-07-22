@@ -230,7 +230,9 @@ export default {
       if (newPrices.length < 1) {
         this.$toast.show('Refrescando...');
       } else {
-        this.exchangeRate = newPrices[0][this.priceType];
+        if (!this.edit) {
+          this.exchangeRate = newPrices[0][this.priceType];
+        }
         this.$toast.clear();
         this.setMoney();
       }

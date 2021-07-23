@@ -61,7 +61,7 @@ export default {
     setTableDataValues() {
       this.tableData.forEach(async (item) => {
         const response = await axios.get(`https://criptoya.com/api/satoshitango/${item.code}/ars`);
-        item.value = response.data.totalBid * item.amount;
+        item.value = Math.round((response.data.totalBid * item.amount) * 100) / 100;
       });
     },
   },

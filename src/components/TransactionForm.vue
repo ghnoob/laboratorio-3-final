@@ -170,12 +170,14 @@ export default {
       return 'recibió';
     },
     maxCryptoAmount() {
+      if (this.newTransaction.action === 'purchase') return Number.MAX_SAFE_INTEGER;
       const inWallet = this.wallet[this.newTransaction.crypto_code];
-
-      if (this.action === 'sale') return inWallet;
-      if (this.action === 'purchase') return Number.MAX_SAFE_INTEGER;
-
-      return inWallet + parseFloat(this.oldTransaction.crypto_amount);
+      if (!this.edit) return inWallet;
+      if (this.oldTransaction.action === 'purchase') {
+        const maxAmount = inWallet - parseFloat(this.oldTransaction.crypto_amount);
+        return maxAmount > 0 ? maxAmount : 0;
+      }
+      return this.oldTransaction.crypto_amount;
     },
     maxCryptoLabel() {
       if (this.newTransaction.action === 'sale') {

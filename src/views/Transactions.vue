@@ -88,10 +88,11 @@ export default {
       }
     },
   },
-
   computed: {
     transactions() {
-      return this.$store.state.transactions;
+      const transactions = [...this.$store.state.transactions];
+      transactions.sort((a, b) => Date.parse(a.datetime) - Date.parse(b.datetime));
+      return transactions;
     },
     cryptoList() {
       return this.$store.state.cryptoCodes;

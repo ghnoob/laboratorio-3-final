@@ -103,6 +103,8 @@ describe('App.vue', () => {
         },
       });
 
+      expect(wrapper.find('p .username').exists()).toBe(false);
+
       expect($store.commit).toHaveBeenCalled();
       expect($store.commit).toHaveBeenCalledWith('setPrices');
 
@@ -118,6 +120,8 @@ describe('App.vue', () => {
           stubs: ['router-link', 'router-view'],
         },
       });
+
+      expect(wrapper.find('p .username').exists()).toBe(false);
 
       expect($store.commit).toHaveBeenCalled();
       expect($store.commit).toHaveBeenCalledWith('setPrices');
@@ -139,6 +143,10 @@ describe('App.vue', () => {
           stubs: ['router-link', 'router-view'],
         },
       });
+
+      const username = wrapper.find('p.username');
+      expect(username.exists()).toBe(true);
+      expect(username.text()).toBe('test');
 
       expect($store.commit).toHaveBeenCalled();
       expect($store.commit).toHaveBeenCalledWith('setPrices');

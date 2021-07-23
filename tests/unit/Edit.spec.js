@@ -1,5 +1,5 @@
 import { shallowMount, flushPromises } from '@vue/test-utils';
-import apiServices from '@/services/apiServices.js';
+import apiServices from '@/services/apiServices';
 import Edit from '@/views/Edit.vue';
 import TransactionForm from '@/components/TransactionForm.vue';
 

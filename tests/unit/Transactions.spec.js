@@ -1,6 +1,6 @@
 import { shallowMount, mount, flushPromises } from '@vue/test-utils';
 import { createRouter, createWebHistory } from 'vue-router';
-import apiServices from '@/services/apiServices.js';
+import apiServices from '@/services/apiServices';
 import Transactions from '@/views/Transactions.vue';
 
 const mockRouter = createRouter({

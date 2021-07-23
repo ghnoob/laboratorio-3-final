@@ -1,6 +1,36 @@
-import { shallowMount, flushPromises } from '@vue/test-utils';
+import { shallowMount, mount, flushPromises } from '@vue/test-utils';
+import { createRouter, createWebHistory } from 'vue-router';
 import apiServices from '@/services/apiServices.js';
 import Transactions from '@/views/Transactions.vue';
+
+const mockRouter = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: () => import('@/views/Home.vue'),
+    },
+    {
+      path: '/buy',
+      name: 'Buy',
+      meta: { requiresAuth: true },
+      component: () => import('@/views/Buy.vue'),
+    },
+    {
+      path: '/sell',
+      name: 'Sell',
+      meta: { requiresAuth: true },
+      component: () => import('@/views/Sell.vue'),
+    },
+    {
+      path: '/edit',
+      name: 'Edit',
+      meta: { requiresAuth: true },
+      component: () => import('@/views/Edit.vue'),
+    },
+  ],
+});
 
 describe('Transactions.vue', () => {
   const $store = {
@@ -90,15 +120,17 @@ describe('Transactions.vue', () => {
     });
 
     it('Solo se puede editar y eliminar si hay una transaccion seleccionada', async () => {
-      const wrapper = shallowMount(Transactions, {
+      const wrapper = mount(Transactions, {
         global: {
           mocks: { $store },
-          stubs: ['router-link'],
+          plugins: [mockRouter],
         },
       });
 
       const deleteButton = wrapper.find('#delete');
+      const editButton = wrapper.find('#edit');
 
+      expect(editButton.attributes('disabled')).toBe('');
       expect(deleteButton.attributes('disabled')).toBe('');
 
       const rows = wrapper.findAll('tbody tr');
@@ -106,6 +138,7 @@ describe('Transactions.vue', () => {
 
       await rows[0].trigger('click');
       expect(rows[0].attributes('class')).toBe('selected');
+      expect(editButton.attributes('disabled')).toBe(undefined);
       expect(deleteButton.attributes('disabled')).toBe(undefined);
 
       await rows[1].trigger('click');
@@ -115,6 +148,7 @@ describe('Transactions.vue', () => {
       await rows[1].trigger('click');
       expect(rows[0].attributes('class')).toBe('');
       expect(rows[1].attributes('class')).toBe('');
+      expect(editButton.attributes('disabled')).toBe('');
       expect(deleteButton.attributes('disabled')).toBe('');
     });
 

@@ -34,7 +34,7 @@
         <button type="button">Vender</button>
       </router-link>
       <router-link :to="{ name: 'Edit', query: { id: selectedId } }">
-        <button type="button" :disabled="selectedId === null">
+        <button id="edit" type="button" :disabled="selectedId === null">
           Editar
         </button>
       </router-link>

@@ -22,7 +22,7 @@
           </select>
         </li>
         <li class="form-row">
-          <label for="crypto-amount">Cantidad de criptomonedas{{ maxCryptoLabel }}</label>
+          <label for="crypto-amount">{{ cryptoAmountLabel }}</label>
           <input
             id="crypto-amount"
             type="number"
@@ -42,14 +42,14 @@
               :key="item.exchange"
               :value="item[priceType]"
             >
-              {{ item.exchange }} - 1 ARS = {{ item[priceType] }}
-              {{ newTransaction.crypto_code.toUpperCase() }}{{i === 0 ? ' (recomendado)' : ''}}
+              {{ item.exchange }} - 1 {{ newTransaction.crypto_code.toUpperCase() }} =
+              {{ item[priceType] }} ARS {{i === 0 ? '(recomendado)' : ''}}
             </option>
             <option :value="null">otro</option>
           </select>
         </li>
         <li class="form-row">
-          <label for="money">Dinero que se {{ moneyLabel }} (ARS)</label>
+          <label for="money">{{ moneyLabel }}</label>
           <input
             id="money"
             type="number"
@@ -128,7 +128,7 @@ export default {
       this.datetime = new Date(this.newTransaction.datetime);
     } else {
       this.newTransaction.user_id = this.$store.state.username;
-      this.newTransaction.datetime = this.datetime;
+      this.newTransaction.datetime = new Date(this.datetime).toISOString();
     }
   },
   methods: {
@@ -162,28 +162,33 @@ export default {
         const month = (dt.getMonth() + 1).toString().padStart(2, '0');
         const day = dt.getDate().toString().padStart(2, '0');
         this.date = `${dt.getFullYear()}-${month}-${day}`;
-        this.time = `${dt.getHours()}:${dt.getMinutes()}`;
+
+        const hours = dt.getHours().toString().padStart(2, '0');
+        const minutes = dt.getMinutes().toString().padStart(2, '0');
+        this.time = `${hours}:${minutes}`;
       },
     },
     moneyLabel() {
-      if (this.newTransaction.action === 'purchase') return 'pagó';
-      return 'recibió';
+      const action = this.newTransaction.action === 'purchase' ? 'pagó' : 'recibió';
+      return `Dinero que se ${action} (ARS)`;
     },
     maxCryptoAmount() {
       if (this.newTransaction.action === 'purchase') return Number.MAX_SAFE_INTEGER;
       const inWallet = this.wallet[this.newTransaction.crypto_code];
       if (!this.edit) return inWallet;
       if (this.oldTransaction.action === 'purchase') {
-        const maxAmount = inWallet - parseFloat(this.oldTransaction.crypto_amount);
+        let maxAmount = inWallet - parseFloat(this.oldTransaction.crypto_amount);
+        maxAmount = Math.round(maxAmount * 1000) / 1000;
         return maxAmount > 0 ? maxAmount : 0;
       }
       return this.oldTransaction.crypto_amount;
     },
-    maxCryptoLabel() {
-      if (this.newTransaction.action === 'sale') {
-        return ` (max. ${this.maxCryptoAmount})`;
+    cryptoAmountLabel() {
+      let action = this.newTransaction.action === 'purchase' ? 'comprar' : 'vender';
+      if (action === 'vender' && this.maxCryptoAmount !== undefined) {
+        action += ` (max. ${this.maxCryptoAmount})`;
       }
-      return '';
+      return `Cantidad de criptomonedas a ${action}`;
     },
     cryptoList() {
       return this.$store.state.cryptoCodes;

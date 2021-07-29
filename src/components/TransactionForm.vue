@@ -192,18 +192,18 @@ export default {
       }
       const inWallet = this.wallet[this.newTransaction.crypto_code];
       if (!this.edit) {
-        return inWallet;
+        return Math.round(inWallet * 1000) / 1000;
       }
       if (this.oldTransaction.action === 'purchase') {
         let maxAmount = inWallet - parseFloat(this.oldTransaction.crypto_amount);
         maxAmount = Math.round(maxAmount * 1000) / 1000;
         return maxAmount > 0 ? maxAmount : 0;
       }
-      return this.oldTransaction.crypto_amount;
+      return Math.round((inWallet + parseFloat(this.oldTransaction.crypto_amount)) * 1000) / 1000;
     },
     cryptoAmountLabel() {
       let action = this.newTransaction.action === 'purchase' ? 'comprar' : 'vender';
-      if (action === 'vender' && this.maxCryptoAmount !== undefined) {
+      if (action === 'vender' && this.newTransaction.crypto_code !== '') {
         action += ` (max. ${this.maxCryptoAmount})`;
       }
       if (action === 'comprar' && this.minCryptoAmount > 0) {

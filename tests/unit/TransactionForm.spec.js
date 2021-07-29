@@ -16,7 +16,7 @@ const mockTransactions = [
   {
     _id: '60eb148da4666761000216f9',
     crypto_code: 'usdc',
-    crypto_amount: '1.01',
+    crypto_amount: '2.01',
     money: '165.23',
     user_id: 'valor_introducido_login',
     action: 'purchase',
@@ -264,7 +264,7 @@ describe('TransactionForm.vue', () => {
 
     const cryptoCode = wrapper.find('#crypto-code');
     await cryptoCode.setValue('usdc');
-    expect(cryptoAmountLabel.text()).toBe('Cantidad de criptomonedas a vender (max. 0)');
+    expect(cryptoAmountLabel.text()).toBe('Cantidad de criptomonedas a vender (max. 1)');
 
     await cryptoCode.setValue('eth');
     expect(cryptoAmountLabel.text()).toBe('Cantidad de criptomonedas a vender (max. 0.07)');
@@ -306,7 +306,7 @@ describe('TransactionForm.vue', () => {
     expect(action.element.value).toBe('sale');
 
     expect(wrapper.find('#crypto-code').element.value).toBe('usdc');
-    expect(wrapper.find('label[for="crypto-amount"]').text()).toBe('Cantidad de criptomonedas a vender (max. 1.01)');
+    expect(wrapper.find('label[for="crypto-amount"]').text()).toBe('Cantidad de criptomonedas a vender (max. 2.01)');
     expect(wrapper.find('#crypto-amount').element.value).toBe('1.01');
 
     const exchange = wrapper.find('#exchange');

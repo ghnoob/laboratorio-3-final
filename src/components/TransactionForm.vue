@@ -26,7 +26,7 @@
           <input
             id="crypto-amount"
             type="number"
-            min="0"
+            :min="minCryptoAmount"
             :max="maxCryptoAmount"
             step="any"
             v-model="newTransaction.crypto_amount"
@@ -172,6 +172,20 @@ export default {
       const action = this.newTransaction.action === 'purchase' ? 'pagó' : 'recibió';
       return `Dinero que se ${action} (ARS)`;
     },
+    minCryptoAmount() {
+      if (!this.edit || this.newTransaction.action === 'sale') {
+        return 0;
+      }
+      const amountInWallet = this.wallet[this.newTransaction.crypto_code];
+      const oldTransactionAmount = parseFloat(this.oldTransaction.crypto_amount);
+      let withoutOldAmount = amountInWallet;
+      if (this.oldTransaction.action === 'purchase') {
+        withoutOldAmount -= oldTransactionAmount;
+      } else {
+        withoutOldAmount += oldTransactionAmount;
+      }
+      return withoutOldAmount >= 0 ? 0 : Math.abs(Math.round(withoutOldAmount * 1000) / 1000);
+    },
     maxCryptoAmount() {
       if (this.newTransaction.action === 'purchase') {
         return Number.MAX_SAFE_INTEGER;
@@ -191,6 +205,9 @@ export default {
       let action = this.newTransaction.action === 'purchase' ? 'comprar' : 'vender';
       if (action === 'vender' && this.maxCryptoAmount !== undefined) {
         action += ` (max. ${this.maxCryptoAmount})`;
+      }
+      if (action === 'comprar' && this.minCryptoAmount > 0) {
+        action += ` (min. ${this.minCryptoAmount})`;
       }
       return `Cantidad de criptomonedas a ${action}`;
     },

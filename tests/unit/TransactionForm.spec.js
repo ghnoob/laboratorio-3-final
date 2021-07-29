@@ -356,7 +356,7 @@ describe('TransactionForm.vue', () => {
 
     expect(wrapper.find('#crypto-code').element.value).toBe('usdc');
     const cryptoAmountLabel = wrapper.find('label[for="crypto-amount"]');
-    expect(cryptoAmountLabel.text()).toBe('Cantidad de criptomonedas a comprar');
+    expect(cryptoAmountLabel.text()).toBe('Cantidad de criptomonedas a comprar (min. 1.01)');
 
     await action.setValue('sale');
     expect(cryptoAmountLabel.text()).toBe('Cantidad de criptomonedas a vender (max. 0)');
@@ -387,6 +387,42 @@ describe('TransactionForm.vue', () => {
 
     await action.setValue('sale');
     expect(cryptoAmountLabel.text()).toBe('Cantidad de criptomonedas a vender (max. 0.01)');
+  });
+
+  it('Editar compra - Sin ventas que limiten el mínimo', async () => {
+    const wrapper = shallowMount(TransactionForm, {
+      global: {
+        mocks: { $toast },
+        stubs: ['router-link'],
+        plugins: [store],
+      },
+      props: {
+        edit: true,
+        id: '60eb148da4666761000216f1',
+      },
+    });
+
+    await nextTick();
+
+    expect(wrapper.find('label[for="crypto-amount"]').text()).toBe('Cantidad de criptomonedas a comprar');
+  });
+
+  it('Editar compra - Hay ventas que limitan el mínimo', async () => {
+    const wrapper = shallowMount(TransactionForm, {
+      global: {
+        mocks: { $toast },
+        stubs: ['router-link'],
+        plugins: [store],
+      },
+      props: {
+        edit: true,
+        id: '60eb148da4666761000216f9',
+      },
+    });
+
+    await nextTick();
+
+    expect(wrapper.find('label[for="crypto-amount"]').text()).toBe('Cantidad de criptomonedas a comprar (min. 1.01)');
   });
 
   it('Los exchanges funcionan correctamente', async () => {

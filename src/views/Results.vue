@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import exchangeServices from '@/services/exchangeServices';
 
 export default {
   data() {
@@ -62,7 +62,7 @@ export default {
 
         const amountInWallet = this.wallet[item.code];
         if (amountInWallet > 0) {
-          const response = await axios.get(`https://criptoya.com/api/satoshitango/${item.code}/ars`);
+          const response = await exchangeServices.getPriceByCrypto(item.code);
           currentValue = response.data.totalBid * amountInWallet;
         }
 

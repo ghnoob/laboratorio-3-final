@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import apiServices from '@/services/apiServices';
+
 export default {
   data() {
     return {
@@ -22,10 +24,20 @@ export default {
   },
 
   methods: {
-    onSubmit() {
+    async pullTransactions() {
       this.$toast.show('Cargando...');
+      try {
+        const response = await apiServices.getTransactions(this.username);
+        this.$store.commit('setTransactions', response.data);
+        this.$toast.clear();
+      } catch {
+        this.$toast.clear();
+        this.$toast.error('Error', { duration: 2000 });
+      }
+    },
+    onSubmit() {
       this.$store.commit('setUsername', this.username);
-      this.$store.dispatch('pullTransactions');
+      this.pullTransactions();
       this.$router.push({ name: 'Home' });
     },
   },

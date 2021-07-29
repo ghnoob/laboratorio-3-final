@@ -23,9 +23,11 @@
 </template>
 
 <script>
+import exchangeServices from '@/services/exchangeServices';
+
 export default {
   mounted() {
-    this.$store.commit('setPrices');
+    this.$store.commit('setPrices', exchangeServices.getPrices());
   },
   computed: {
     username() {
@@ -33,11 +35,6 @@ export default {
     },
     transactions() {
       return this.$store.state.transactions;
-    },
-  },
-  watch: {
-    transactions() {
-      this.$toast.clear();
     },
   },
 };

@@ -1,6 +1,4 @@
 import { createStore } from 'vuex';
-import axios from 'axios';
-import apiServices from '../services/apiServices';
 
 export default createStore({
   state() {
@@ -23,17 +21,8 @@ export default createStore({
     setTransactions(state, arr) {
       state.transactions = arr;
     },
-    setPrices(state) {
-      state.prices = state.cryptoCodes.map((item) => ({ code: item.code, exchanges: [] }));
-      state.prices.forEach(async (item) => {
-        const response = await axios.get(`https://criptoya.com/api/${item.code}/ars`);
-        item.exchanges = Object.keys(response.data).map((exchange) => (
-          {
-            exchange,
-            bid: response.data[exchange].totalBid,
-            ask: response.data[exchange].totalAsk,
-          }));
-      });
+    setPrices(state, priceList) {
+      state.prices = priceList;
     },
     pushTransaction(state, transaction) {
       state.transactions.push(transaction);
@@ -46,12 +35,6 @@ export default createStore({
     },
     deleteTransaction(state, id) {
       state.transactions = state.transactions.filter((elem) => elem._id !== id);
-    },
-  },
-  actions: {
-    async pullTransactions({ commit, state }) {
-      const response = await apiServices.getTransactions(state.username);
-      commit('setTransactions', response.data);
     },
   },
   getters: {

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import exchangeServices from '@/services/exchangeServices';
 import { shallowMount, flushPromises } from '@vue/test-utils';
 import Results from '@/views/Results.vue';
 
@@ -74,7 +74,7 @@ describe('Results.vue', () => {
     });
 
     it('Los datos se deben mostrar correctamente', async () => {
-      axios.get = jest.fn(() => ({
+      exchangeServices.getPriceByCrypto = jest.fn(() => ({
         data: {
           ask: 5912442.48,
           totalAsk: 5971566.9,

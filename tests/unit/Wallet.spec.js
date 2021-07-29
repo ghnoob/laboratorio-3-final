@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { shallowMount, flushPromises } from '@vue/test-utils';
+import exchangeServices from '@/services/exchangeServices';
 import Wallet from '@/views/Wallet.vue';
 
 describe('Wallet.vue', () => {
@@ -82,7 +82,7 @@ describe('Wallet.vue', () => {
       $store.state.transactions = mockTransactions;
 
       const mockResponses = {
-        'https://criptoya.com/api/satoshitango/btc/ars': {
+        btc: {
           data: {
             ask: 5912442.48,
             totalAsk: 5971566.9,
@@ -91,7 +91,7 @@ describe('Wallet.vue', () => {
             time: 1626027655,
           },
         },
-        'https://criptoya.com/api/satoshitango/eth/ars': {
+        eth: {
           data: {
             ask: 366459.91,
             totalAsk: 370124.51,
@@ -102,7 +102,7 @@ describe('Wallet.vue', () => {
         },
       };
 
-      axios.get = jest.fn((link) => mockResponses[link]);
+      exchangeServices.getPriceByCrypto = jest.fn((code) => mockResponses[code]);
     });
 
     it('Los datos se renderizan correctamente', async () => {

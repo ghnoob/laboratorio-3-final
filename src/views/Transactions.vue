@@ -41,7 +41,7 @@
       <button
         id="delete"
         type="button"
-        :disabled="selectedId === null"
+        :disabled="!canDelete"
         @click="deleteTransaction"
       >
         Eliminar
@@ -82,6 +82,7 @@ export default {
         await apiServices.deleteTransaction(this.selectedId);
         this.$store.commit('deleteTransaction', this.selectedId);
         this.$toast.clear();
+        this.selectedId = null;
       } catch {
         this.$toast.clear();
         this.$toast.error('Error', { duration: 2000 });
@@ -96,6 +97,35 @@ export default {
     },
     cryptoList() {
       return this.$store.state.cryptoCodes;
+    },
+    wallet() {
+      const wallet = {};
+
+      this.$store.state.cryptoCodes.forEach((item) => {
+        wallet[item.code] = 0;
+      });
+
+      this.$store.state.transactions.forEach((item) => {
+        const amount = parseFloat(item.crypto_amount);
+        if (item.action === 'purchase') {
+          wallet[item.crypto_code] += amount;
+        } else {
+          wallet[item.crypto_code] -= amount;
+        }
+      });
+
+      return wallet;
+    },
+    canDelete() {
+      if (this.selectedId === null) {
+        return false;
+      }
+      const selectedTransaction = this.transactions.find((t) => t._id === this.selectedId);
+      if (selectedTransaction.action === 'purchase') {
+        const amountInWallet = this.wallet[selectedTransaction.crypto_code];
+        return (amountInWallet - selectedTransaction.crypto_amount) >= 0;
+      }
+      return true;
     },
   },
 };

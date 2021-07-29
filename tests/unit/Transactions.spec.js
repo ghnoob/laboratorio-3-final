@@ -139,7 +139,8 @@ describe('Transactions.vue', () => {
       await rows[0].trigger('click');
       expect(rows[0].attributes('class')).toBe('selected');
       expect(editButton.attributes('disabled')).toBe(undefined);
-      expect(deleteButton.attributes('disabled')).toBe(undefined);
+      // no se puede borrar la venta porque dejaría la cartera en negativo
+      expect(deleteButton.attributes('disabled')).toBe('');
 
       await rows[1].trigger('click');
       expect(rows[0].attributes('class')).toBe('');
@@ -165,18 +166,18 @@ describe('Transactions.vue', () => {
       const deleteButton = wrapper.find('#delete');
       const rows = wrapper.findAll('tbody tr');
 
-      await rows[0].trigger('click');
+      await rows[1].trigger('click');
       await deleteButton.trigger('click');
 
       expect($toast.show).toHaveBeenCalled();
 
       expect(apiServices.deleteTransaction).toHaveBeenCalled();
-      expect(apiServices.deleteTransaction).toHaveBeenCalledWith(mockTransactions[0]._id);
+      expect(apiServices.deleteTransaction).toHaveBeenCalledWith(mockTransactions[1]._id);
 
       await flushPromises();
 
       expect($store.commit).toHaveBeenCalled();
-      expect($store.commit).toHaveBeenCalledWith('deleteTransaction', mockTransactions[0]._id);
+      expect($store.commit).toHaveBeenCalledWith('deleteTransaction', mockTransactions[1]._id);
 
       expect($toast.clear).toHaveBeenCalled();
     });
@@ -196,13 +197,13 @@ describe('Transactions.vue', () => {
       const deleteButton = wrapper.find('#delete');
       const rows = wrapper.findAll('tbody tr');
 
-      await rows[0].trigger('click');
+      await rows[1].trigger('click');
       await deleteButton.trigger('click');
 
       expect($toast.show).toHaveBeenCalled();
 
       expect(apiServices.deleteTransaction).toHaveBeenCalled();
-      expect(apiServices.deleteTransaction).toHaveBeenCalledWith(mockTransactions[0]._id);
+      expect(apiServices.deleteTransaction).toHaveBeenCalledWith(mockTransactions[1]._id);
 
       await flushPromises();
 

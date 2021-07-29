@@ -63,14 +63,19 @@ export default {
 
   methods: {
     rowClick(id) {
-      if (id !== this.selectedId) this.selectedId = id;
-      else this.selectedId = null;
+      if (id !== this.selectedId) {
+        this.selectedId = id;
+      } else {
+        this.selectedId = null;
+      }
     },
     getCryptoName(code) {
       return this.cryptoList.find((item) => item.code === code).name;
     },
     getAction(action) {
-      if (action === 'purchase') return 'Compra';
+      if (action === 'purchase') {
+        return 'Compra';
+      }
       return 'Venta';
     },
     getLocalizedDateTime(isoTime) {

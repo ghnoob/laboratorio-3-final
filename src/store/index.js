@@ -40,7 +40,9 @@ export default createStore({
     },
     editTransaction(state, transaction) {
       const index = state.transactions.findIndex((elem) => elem._id === transaction._id);
-      if (index >= 0) state.transactions[index] = transaction;
+      if (index >= 0) {
+        state.transactions[index] = transaction;
+      }
     },
     deleteTransaction(state, id) {
       state.transactions = state.transactions.filter((elem) => elem._id !== id);

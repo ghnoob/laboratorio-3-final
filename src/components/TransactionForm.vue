@@ -173,9 +173,13 @@ export default {
       return `Dinero que se ${action} (ARS)`;
     },
     maxCryptoAmount() {
-      if (this.newTransaction.action === 'purchase') return Number.MAX_SAFE_INTEGER;
+      if (this.newTransaction.action === 'purchase') {
+        return Number.MAX_SAFE_INTEGER;
+      }
       const inWallet = this.wallet[this.newTransaction.crypto_code];
-      if (!this.edit) return inWallet;
+      if (!this.edit) {
+        return inWallet;
+      }
       if (this.oldTransaction.action === 'purchase') {
         let maxAmount = inWallet - parseFloat(this.oldTransaction.crypto_amount);
         maxAmount = Math.round(maxAmount * 1000) / 1000;

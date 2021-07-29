@@ -53,8 +53,11 @@ export default {
         let currentValue = 0;
 
         operations.forEach((op) => {
-          if (op.action === 'sale') income += parseFloat(op.money);
-          else spendings += parseFloat(op.money);
+          if (op.action === 'sale') {
+            income += parseFloat(op.money);
+          } else {
+            spendings += parseFloat(op.money);
+          }
         });
 
         const amountInWallet = this.wallet[item.code];

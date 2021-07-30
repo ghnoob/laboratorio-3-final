@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <div v-if="username.length > 0">
+    <div v-if="isLoggedIn">
       <header>
         <p class="username">{{ username }}</p>
       </header>
@@ -35,6 +35,9 @@ export default {
     },
     transactions() {
       return this.$store.state.transactions;
+    },
+    isLoggedIn() {
+      return this.username.length > 0;
     },
   },
 };

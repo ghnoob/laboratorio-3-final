@@ -1,6 +1,6 @@
 <template>
   <h1>Cartera</h1>
-  <div v-if="availableCryptos.length > 0">
+  <div v-if="renderTable">
     <table class="green-table">
       <thead>
         <tr>
@@ -107,6 +107,9 @@ export default {
     },
     renderChart() {
       return this.tableData.length > 0 && this.tableData.every((crypto) => crypto.value > 0);
+    },
+    renderTable() {
+      return this.availableCryptos.length > 0;
     },
   },
 };

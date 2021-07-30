@@ -1,6 +1,6 @@
 <template>
   <h1>Transacciones</h1>
-  <div v-if="transactions.length > 0">
+  <div v-if="renderTable">
     <table class="green-table">
       <thead>
         <tr>
@@ -131,6 +131,9 @@ export default {
         return (amountInWallet - selectedTransaction.crypto_amount) >= 0;
       }
       return true;
+    },
+    renderTable() {
+      return this.transactions.length > 0;
     },
   },
 };

@@ -17,6 +17,7 @@ export default {
           ask: response.data[exchange].totalAsk,
         }));
     });
+    return prices;
   },
   getPriceByCrypto(cryptoCode) {
     return apiClient.get(`/satoshitango/${cryptoCode}/ars`);

@@ -4,8 +4,8 @@
 </template>
 
 <script>
-import TransactionForm from '@/components/TransactionForm.vue';
-import apiServices from '@/services/apiServices';
+import TransactionForm from '../components/TransactionForm.vue';
+import apiServices from '../services/apiServices';
 
 export default {
   components: {

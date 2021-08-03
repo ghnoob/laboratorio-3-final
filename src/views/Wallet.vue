@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import exchangeServices from '@/services/exchangeServices';
-import WalletChart from '@/components/WalletChart.vue';
+import exchangeServices from '../services/exchangeServices';
+import WalletChart from '../components/WalletChart.vue';
 
 export default {
   components: {

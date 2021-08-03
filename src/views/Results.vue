@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import exchangeServices from '@/services/exchangeServices';
+import exchangeServices from '../services/exchangeServices';
 
 export default {
   data() {

@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import apiServices from '@/services/apiServices';
+import apiServices from '../services/apiServices';
 
 export default {
   data() {

@@ -15,17 +15,26 @@ describe('Wallet.vue', () => {
     },
   };
 
+  const $toast = {
+    show: jest.fn(),
+    error: jest.fn(),
+    clear: jest.fn(),
+    success: jest.fn(),
+  };
+
   describe('Cartera vacía', () => {
     it('No se muestra la tabla', () => {
       const wrapper = shallowMount(Wallet, {
         global: {
-          mocks: { $store },
+          mocks: { $store, $toast },
         },
       });
 
       expect(wrapper.find('table').exists()).toBe(false);
       expect(wrapper.find('p').exists()).toBe(true);
       expect(wrapper.find('p').text()).toBe('La cartera está vacía.');
+
+      expect($toast.show).not.toHaveBeenCalled();
     });
   });
 
@@ -78,37 +87,37 @@ describe('Wallet.vue', () => {
       },
     ];
 
+    const mockResponses = {
+      btc: {
+        data: {
+          ask: 5912442.48,
+          totalAsk: 5971566.9,
+          bid: 5797256.86,
+          totalBid: 5739284.29,
+          time: 1626027655,
+        },
+      },
+      eth: {
+        data: {
+          ask: 366459.91,
+          totalAsk: 370124.51,
+          bid: 351092.86,
+          totalBid: 347581.93,
+          time: 1627079748,
+        },
+      },
+    };
+
     beforeAll(() => {
       $store.state.transactions = mockTransactions;
-
-      const mockResponses = {
-        btc: {
-          data: {
-            ask: 5912442.48,
-            totalAsk: 5971566.9,
-            bid: 5797256.86,
-            totalBid: 5739284.29,
-            time: 1626027655,
-          },
-        },
-        eth: {
-          data: {
-            ask: 366459.91,
-            totalAsk: 370124.51,
-            bid: 351092.86,
-            totalBid: 347581.93,
-            time: 1627079748,
-          },
-        },
-      };
-
-      exchangeServices.getPriceByCrypto = jest.fn((code) => mockResponses[code]);
     });
 
     it('Los datos se renderizan correctamente', async () => {
+      exchangeServices.getPriceByCrypto = jest.fn((code) => mockResponses[code]);
+
       const wrapper = shallowMount(Wallet, {
         global: {
-          mocks: { $store },
+          mocks: { $store, $toast },
         },
       });
 
@@ -117,7 +126,12 @@ describe('Wallet.vue', () => {
 
       expect(wrapper.find('.chart-container').exists()).toBe(false);
 
+      expect($toast.show).toHaveBeenCalled();
+
       await flushPromises();
+
+      expect($toast.clear).toHaveBeenCalled();
+      expect($toast.success).toHaveBeenCalled();
 
       const cells = wrapper.findAll('tbody td');
 
@@ -147,6 +161,25 @@ describe('Wallet.vue', () => {
       };
 
       expect(wrapper.vm.chartData).toEqual(expectedChartData);
+    });
+
+    it('Si hay un error se muestra un mensaje', async () => {
+      exchangeServices.getPriceByCrypto = jest.fn(() => {
+        throw new Error();
+      });
+
+      shallowMount(Wallet, {
+        global: {
+          mocks: { $store, $toast },
+        },
+      });
+
+      expect($toast.show).toHaveBeenCalled();
+
+      await flushPromises();
+
+      expect($toast.clear).toHaveBeenCalled();
+      expect($toast.error).toHaveBeenCalled();
     });
   });
 });

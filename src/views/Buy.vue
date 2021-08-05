@@ -19,16 +19,17 @@ export default {
   methods: {
     async buy(transaction) {
       try {
-        this.$toast.show('Cargando transacción...');
+        this.$toast.show('Comprando...', { duration: false });
         const response = await apiServices.postTransaction(transaction);
         this.transaction = transaction;
         this.transaction._id = response.data._id;
         this.$store.commit('pushTransaction', this.transaction);
         this.$router.push({ name: 'Transactions' });
         this.$toast.clear();
-      } catch {
+        this.$toast.success('Comprado');
+      } catch (error) {
         this.$toast.clear();
-        this.$toast.error('Error', { duration: 2000 });
+        this.$toast.error(error.toString());
       }
     },
   },

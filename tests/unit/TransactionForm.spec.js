@@ -1,6 +1,7 @@
 import { nextTick } from 'vue';
 import { createStore } from 'vuex';
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, flushPromises } from '@vue/test-utils';
+import exchangeServices from '@/services/exchangeServices';
 import TransactionForm from '@/components/TransactionForm.vue';
 
 const mockTransactions = [
@@ -191,14 +192,17 @@ describe('TransactionForm.vue', () => {
       ],
     },
     mutations: {
-      setPrices(state) {
-        state.prices = newMockPrices;
+      setPrices(state, newPrices) {
+        state.prices = newPrices;
       },
     },
   });
 
   const $toast = {
+    show: jest.fn(),
     clear: jest.fn(),
+    error: jest.fn(),
+    success: jest.fn(),
   };
 
   afterEach(() => jest.clearAllMocks());
@@ -426,6 +430,8 @@ describe('TransactionForm.vue', () => {
   });
 
   it('Los exchanges funcionan correctamente', async () => {
+    exchangeServices.getPrices = jest.fn(() => newMockPrices);
+
     const wrapper = shallowMount(TransactionForm, {
       global: {
         mocks: { $toast },
@@ -476,9 +482,43 @@ describe('TransactionForm.vue', () => {
     await cryptoAmount.setValue('2');
     expect(money.element.value).toBe('12.42');
 
-    await wrapper.find('button').trigger('click');
+    await wrapper.find('#update').trigger('click');
+
+    expect($toast.show).toHaveBeenCalled();
+
+    await flushPromises();
+
+    expect($toast.clear).toHaveBeenCalled();
+    expect($toast.success).toHaveBeenCalled();
 
     expect(exchange.element.value).toBe('175.62');
     expect(money.element.value).toBe('351.24');
+  });
+
+  it('Si al refrescar hay un error se muestra un mensaje', async () => {
+    exchangeServices.getPrices = jest.fn(() => {
+      throw new Error();
+    });
+
+    const wrapper = shallowMount(TransactionForm, {
+      global: {
+        mocks: { $toast },
+        stubs: ['router-link'],
+        plugins: [store],
+      },
+      props: {
+        edit: false,
+        action: 'purchase',
+      },
+    });
+
+    await wrapper.find('#update').trigger('click');
+
+    expect($toast.show).toHaveBeenCalled();
+
+    await flushPromises();
+
+    expect($toast.clear).toHaveBeenCalled();
+    expect($toast.error).toHaveBeenCalled();
   });
 });

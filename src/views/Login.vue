@@ -25,14 +25,15 @@ export default {
 
   methods: {
     async pullTransactions() {
-      this.$toast.show('Cargando...');
       try {
+        this.$toast.show('Cargando...', { duration: false });
         const response = await apiServices.getTransactions(this.username);
         this.$store.commit('setTransactions', response.data);
         this.$toast.clear();
-      } catch {
+        this.$toast.success('Datos cargados');
+      } catch (error) {
         this.$toast.clear();
-        this.$toast.error('Error', { duration: 2000 });
+        this.$toast.error(error.toString());
       }
     },
     onSubmit() {

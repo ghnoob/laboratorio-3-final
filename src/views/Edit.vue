@@ -14,14 +14,15 @@ export default {
   methods: {
     async edit(transaction) {
       try {
-        this.$toast.show('Modificando...');
+        this.$toast.show('Modificando...', { duration: false });
         await apiServices.patchTransaction(transaction);
         this.$store.commit('editTransaction', transaction);
         this.$router.push({ name: 'Transactions' });
         this.$toast.clear();
-      } catch {
+        this.$toast.success('Modificado');
+      } catch (error) {
         this.$toast.clear();
-        this.$toast.error('Error', { duration: 2000 });
+        this.$toast.error(error.toString());
       }
     },
   },

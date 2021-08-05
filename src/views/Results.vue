@@ -1,6 +1,6 @@
 <template>
   <h1>Resultados</h1>
-  <table class="green-table" v-if="transactions.length > 0">
+  <table class="green-table" v-if="renderTable">
     <thead>
       <tr>
         <th>Criptomoneda</th>
@@ -33,8 +33,9 @@ export default {
     };
   },
   mounted() {
-    this.fillTableData();
-    this.setResults();
+    if (this.renderTable) {
+      this.onMount();
+    }
   },
   methods: {
     fillTableData() {
@@ -44,8 +45,8 @@ export default {
         result: 0, // seteado despues
       }));
     },
-    setResults() {
-      this.tableData.forEach(async (item) => {
+    async setResults() {
+      await Promise.all(this.tableData.map(async (item) => {
         const operations = this.transactions.filter((t) => t.crypto_code === item.code);
 
         let income = 0;
@@ -67,12 +68,27 @@ export default {
         }
 
         item.result = currentValue - spendings + income;
-      });
+      }));
+    },
+    async onMount() {
+      try {
+        this.$toast.show('Cargando resultados', { duration: false });
+        this.fillTableData();
+        await this.setResults();
+        this.$toast.clear();
+        this.$toast.success('Resultados cargados');
+      } catch (error) {
+        this.$toast.clear();
+        this.$toast.error(error.toString());
+      }
     },
   },
   computed: {
     transactions() {
       return this.$store.state.transactions;
+    },
+    renderTable() {
+      return this.transactions.length > 0;
     },
     filteredCryptoList() {
       const codes = this.$store.state.cryptoCodes;

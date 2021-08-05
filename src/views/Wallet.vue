@@ -46,8 +46,9 @@ export default {
     };
   },
   mounted() {
-    this.fillTableData();
-    this.setTableDataValues();
+    if (this.renderTable) {
+      this.onMount();
+    }
   },
   methods: {
     fillTableData() {
@@ -58,11 +59,23 @@ export default {
         value: 0, // seteado despues
       }));
     },
-    setTableDataValues() {
-      this.tableData.forEach(async (item) => {
+    async setTableDataValues() {
+      await Promise.all(this.tableData.map(async (item) => {
         const response = await exchangeServices.getPriceByCrypto(item.code);
         item.value = Math.round((response.data.totalBid * item.amount) * 100) / 100;
-      });
+      }));
+    },
+    async onMount() {
+      try {
+        this.$toast.show('Cargando cartera...');
+        this.fillTableData();
+        await this.setTableDataValues();
+        this.$toast.clear();
+        this.$toast.success('Cartera cargada');
+      } catch (error) {
+        this.$toast.clear();
+        this.$toast.error(error.toString());
+      }
     },
   },
   computed: {

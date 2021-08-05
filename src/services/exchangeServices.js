@@ -6,9 +6,9 @@ const apiClient = axios.create({
 });
 
 export default {
-  getPrices() {
+  async getPrices() {
     const prices = store.state.cryptoCodes.map((item) => ({ code: item.code, exchanges: [] }));
-    prices.forEach(async (item) => {
+    await Promise.all(prices.map(async (item) => {
       const response = await apiClient.get(`/${item.code}/ars`);
       item.exchanges = Object.keys(response.data).map((exchange) => (
         {
@@ -16,7 +16,7 @@ export default {
           bid: response.data[exchange].totalBid,
           ask: response.data[exchange].totalAsk,
         }));
-    });
+    }));
     return prices;
   },
   getPriceByCrypto(cryptoCode) {

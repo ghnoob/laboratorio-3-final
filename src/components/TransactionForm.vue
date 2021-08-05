@@ -75,7 +75,7 @@
           <input id="time" type="time" v-model="time" autocomplete="off" required>
         </li>
         <li class="form-row">
-          <button type="button" @click="$store.commit('setPrices')">Refrescar exchanges</button>
+          <button id="update" type="button" @click="updateExchanges">Refrescar exchanges</button>
           <button type="submit">Aceptar</button>
           <router-link :to="{ name: 'Transactions' }">
             <button type="button">Cancelar</button>
@@ -87,6 +87,8 @@
 </template>
 
 <script>
+import exchangeServices from '../services/exchangeServices';
+
 export default {
   name: 'TransactionForm',
   props: {
@@ -150,6 +152,18 @@ export default {
       if (this.exchangeRate !== null) {
         const newVal = (this.exchangeRate * this.newTransaction.crypto_amount).toFixed(2);
         this.newTransaction.money = newVal;
+      }
+    },
+    async updateExchanges() {
+      try {
+        this.$toast.show('Refrescando...', { duration: false });
+        const newPrices = await exchangeServices.getPrices();
+        this.$toast.clear();
+        this.$toast.success('Refresacado');
+        this.$store.commit('setPrices', newPrices);
+      } catch (error) {
+        this.$toast.clear();
+        this.$toast.error(error.toString());
       }
     },
   },
@@ -255,13 +269,8 @@ export default {
       this.newTransaction.datetime = new Date(value).toISOString();
     },
     prices(newPrices) {
-      if (newPrices.length < 1) {
-        this.$toast.show('Refrescando...');
-      } else {
-        if (!this.edit) {
-          this.exchangeRate = newPrices[0][this.priceType];
-        }
-        this.$toast.clear();
+      if (!this.edit && newPrices.length > 0) {
+        this.exchangeRate = newPrices[0][this.priceType];
         this.setMoney();
       }
     },

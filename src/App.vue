@@ -27,7 +27,21 @@ import exchangeServices from './services/exchangeServices';
 
 export default {
   mounted() {
-    this.$store.commit('setPrices', exchangeServices.getPrices());
+    this.loadPrices();
+  },
+  methods: {
+    async loadPrices() {
+      try {
+        this.$toast.show('Cargando precios...', { duration: false });
+        const prices = await exchangeServices.getPrices();
+        this.$store.commit('setPrices', prices);
+        this.$toast.clear();
+        this.$toast.success('Precios cargados');
+      } catch (error) {
+        this.$toast.clear();
+        this.$toast.error(error.toString());
+      }
+    },
   },
   computed: {
     username() {

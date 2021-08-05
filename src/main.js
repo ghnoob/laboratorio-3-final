@@ -19,5 +19,5 @@ router.beforeEach((to, from, next) => {
 const app = createApp(App);
 app.use(store);
 app.use(router);
-app.use(Toaster, { duration: false });
+app.use(Toaster, { duration: 3000 });
 app.mount('#app');

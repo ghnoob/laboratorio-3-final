@@ -15,17 +15,26 @@ describe('Results.vue', () => {
     },
   };
 
+  const $toast = {
+    show: jest.fn(),
+    error: jest.fn(),
+    clear: jest.fn(),
+    success: jest.fn(),
+  };
+
   describe('Sin transacciones previas', () => {
     it('La tabla no se renderiza', () => {
       const wrapper = shallowMount(Results, {
         global: {
-          mocks: { $store },
+          mocks: { $store, $toast },
         },
       });
 
       expect(wrapper.find('table').exists()).toBe(false);
       expect(wrapper.find('p').exists()).toBe(true);
       expect(wrapper.find('p').text()).toBe('No se han registrado transacciones hasta el momento.');
+
+      expect($toast.show).not.toHaveBeenCalled();
     });
   });
 
@@ -86,14 +95,17 @@ describe('Results.vue', () => {
 
       const wrapper = shallowMount(Results, {
         global: {
-          mocks: { $store },
+          mocks: { $store, $toast },
         },
       });
 
       expect(wrapper.find('table').exists()).toBe(true);
       expect(wrapper.find('p').exists()).toBe(false);
 
+      expect($toast.show).toHaveBeenCalled();
       await flushPromises();
+      expect($toast.clear).toHaveBeenCalled();
+      expect($toast.success).toHaveBeenCalled();
 
       const cells = wrapper.findAll('tbody td');
 
@@ -108,6 +120,26 @@ describe('Results.vue', () => {
       const total = wrapper.find('tfoot td:nth-child(2)');
       expect(total.text()).toBe('$-3156.72');
       expect(total.attributes('class')).toBe('red');
+    });
+
+    it('Si hay un error se muestra un mensaje', async () => {
+      exchangeServices.getPriceByCrypto = jest.fn(() => {
+        throw new Error();
+      });
+
+      const wrapper = shallowMount(Results, {
+        global: {
+          mocks: { $store, $toast },
+        },
+      });
+
+      expect(wrapper.find('table').exists()).toBe(true);
+      expect(wrapper.find('p').exists()).toBe(false);
+
+      expect($toast.show).toHaveBeenCalled();
+      await flushPromises();
+      expect($toast.clear).toHaveBeenCalled();
+      expect($toast.error).toHaveBeenCalled();
     });
   });
 });

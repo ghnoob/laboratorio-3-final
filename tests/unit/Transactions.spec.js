@@ -90,6 +90,7 @@ describe('Transactions.vue', () => {
       show: jest.fn(),
       clear: jest.fn(),
       error: jest.fn(),
+      success: jest.fn(),
     };
 
     it('Los datos de la tabla se renderizan correctamente', () => {
@@ -180,6 +181,7 @@ describe('Transactions.vue', () => {
       expect($store.commit).toHaveBeenCalledWith('deleteTransaction', mockTransactions[1]._id);
 
       expect($toast.clear).toHaveBeenCalled();
+      expect($toast.success).toHaveBeenCalled();
     });
 
     it('Si hay un error al borrar se muestra un mensaje', async () => {

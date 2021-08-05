@@ -26,6 +26,7 @@ describe('Edit.vue', () => {
     show: jest.fn(),
     error: jest.fn(),
     clear: jest.fn(),
+    success: jest.fn(),
   };
 
   const $router = {
@@ -64,6 +65,7 @@ describe('Edit.vue', () => {
     expect($router.push).toHaveBeenCalledWith({ name: 'Transactions' });
 
     expect($toast.clear).toHaveBeenCalled();
+    expect($toast.success).toHaveBeenCalled();
   });
 
   it('Si hay un error se debe mostrar un mensaje', async () => {

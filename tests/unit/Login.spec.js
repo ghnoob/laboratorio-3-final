@@ -11,6 +11,7 @@ describe('Login.vue', () => {
     show: jest.fn(),
     clear: jest.fn(),
     error: jest.fn(),
+    success: jest.fn(),
   };
 
   const $router = {
@@ -18,10 +19,9 @@ describe('Login.vue', () => {
   };
 
   it('Se accede si se ingresa un usuario', async () => {
-    apiServices.getTransactions = jest.fn();
+    apiServices.getTransactions = jest.fn(() => ({ data: ['test'] }));
 
     const wrapper = shallowMount(Login, {
-      attachTo: document.body,
       global: {
         mocks: { $store, $toast, $router },
       },
@@ -32,9 +32,8 @@ describe('Login.vue', () => {
     expect($store.commit).toHaveBeenCalledWith('setTransactions', []);
 
     await wrapper.find('input').setValue('valor_introducido_login');
-    await wrapper.find('button').trigger('click');
+    await wrapper.find('form').trigger('submit.prevent');
 
-    expect($store.commit).toHaveBeenCalledTimes(3);
     expect($store.commit).toHaveBeenCalledWith('setUsername', 'valor_introducido_login');
 
     expect($toast.show).toHaveBeenCalled();
@@ -43,6 +42,9 @@ describe('Login.vue', () => {
 
     await flushPromises();
     expect($toast.clear).toHaveBeenCalled();
+    expect($store.commit).toHaveBeenCalledWith('setTransactions', ['test']);
+    expect($store.commit).toHaveBeenCalledTimes(4);
+    expect($toast.success).toHaveBeenCalled();
 
     expect($router.push).toHaveBeenCalled();
     expect($router.push).toHaveBeenCalledWith({ name: 'Home' });

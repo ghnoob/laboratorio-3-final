@@ -83,14 +83,15 @@ export default {
     },
     async deleteTransaction() {
       try {
-        this.$toast.show('Eliminando...');
+        this.$toast.show('Eliminando...', { duration: false });
         await apiServices.deleteTransaction(this.selectedId);
         this.$store.commit('deleteTransaction', this.selectedId);
-        this.$toast.clear();
         this.selectedId = null;
-      } catch {
         this.$toast.clear();
-        this.$toast.error('Error', { duration: 2000 });
+        this.$toast.success('Eliminado');
+      } catch (error) {
+        this.$toast.clear();
+        this.$toast.error(error.toString());
       }
     },
   },

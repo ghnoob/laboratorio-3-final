@@ -46,7 +46,7 @@ describe('Buy.vue', () => {
       },
     });
 
-    await wrapper.findComponent(TransactionForm).vm.$emit('submitted', mockTransaction);
+    wrapper.findComponent(TransactionForm).vm.$emit('submitted', mockTransaction);
 
     expect($toast.show).toHaveBeenCalled();
 
@@ -76,7 +76,7 @@ describe('Buy.vue', () => {
       },
     });
 
-    await wrapper.findComponent(TransactionForm).vm.$emit('submitted', mockTransaction);
+    wrapper.findComponent(TransactionForm).vm.$emit('submitted', mockTransaction);
 
     expect($toast.show).toHaveBeenCalled();
 

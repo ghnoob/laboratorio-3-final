@@ -67,7 +67,7 @@ export default {
           currentValue = response.data.totalBid * amountInWallet;
         }
 
-        item.result = currentValue - spendings + income;
+        item.result = Math.round((currentValue - spendings + income) * 100) / 100;
       }));
     },
     async onMount() {

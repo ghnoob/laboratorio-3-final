@@ -1,17 +1,15 @@
 import { shallowMount, flushPromises } from '@vue/test-utils';
 import exchangeServices from '@/services/exchangeServices';
 import Wallet from '@/views/Wallet.vue';
+import mockCryptoCodes from './mocks/mockCryptoCodes';
+import mockTransactions from './mocks/mockTransactions';
+import mockResponses from './mocks/mockResponses';
 
 describe('Wallet.vue', () => {
   const $store = {
     state: {
       transactions: [],
-      cryptoCodes: [
-        { code: 'btc', name: 'Bitcoin', color: '#ff9315' },
-        { code: 'dai', name: 'Dai', color: '#fd024f' },
-        { code: 'eth', name: 'Ethereum', color: '#5b73a0' },
-        { code: 'usdc', name: 'USD Coin', color: '#2775ca' },
-      ],
+      cryptoCodes: mockCryptoCodes,
     },
   };
 
@@ -39,75 +37,6 @@ describe('Wallet.vue', () => {
   });
 
   describe('Con criptomonedas en la cartera', () => {
-    const mockTransactions = [
-      {
-        _id: '60eb148da4666761000216f9',
-        crypto_code: 'usdc',
-        crypto_amount: '1.01',
-        money: '165.23',
-        user_id: 'valor_introducido_login',
-        action: 'purchase',
-        datetime: '2021-11-07T17:50:00.000Z',
-      },
-      {
-        _id: '60eb149ba4666761000216fc',
-        crypto_code: 'usdc',
-        crypto_amount: '1.01',
-        money: '170.98',
-        user_id: 'valor_introducido_login',
-        action: 'sale',
-        datetime: '2021-11-07T20:50:00.000Z',
-      },
-      {
-        _id: '60eb148da4666761000216f7',
-        crypto_code: 'btc',
-        crypto_amount: '0.01',
-        money: '58447',
-        user_id: 'valor_introducido_login',
-        action: 'purchase',
-        datetime: '2021-11-11T17:50:00.000Z',
-      },
-      {
-        _id: '60eb148da4666761000216f5',
-        crypto_code: 'btc',
-        crypto_amount: '0.02',
-        money: '116894',
-        user_id: 'valor_introducido_login',
-        action: 'purchase',
-        datetime: '2021-11-12T17:50:00.000Z',
-      },
-      {
-        _id: '60eb148da4666761000216ff',
-        crypto_code: 'eth',
-        crypto_amount: '0.07',
-        money: '25443.81',
-        user_id: 'valor_introducido_login',
-        action: 'purchase',
-        datetime: '2021-07-23T22:30:00.000Z',
-      },
-    ];
-
-    const mockResponses = {
-      btc: {
-        data: {
-          ask: 5912442.48,
-          totalAsk: 5971566.9,
-          bid: 5797256.86,
-          totalBid: 5739284.29,
-          time: 1626027655,
-        },
-      },
-      eth: {
-        data: {
-          ask: 366459.91,
-          totalAsk: 370124.51,
-          bid: 351092.86,
-          totalBid: 347581.93,
-          time: 1627079748,
-        },
-      },
-    };
-
     beforeAll(() => {
       $store.state.transactions = mockTransactions;
     });

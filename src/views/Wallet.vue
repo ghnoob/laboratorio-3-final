@@ -13,14 +13,14 @@
         <tr v-for="crypto in tableData" :key="crypto.code">
           <td>{{ crypto.name }}</td>
           <td>{{ crypto.amount }}</td>
-          <td>${{ crypto.value.toFixed(2) }}</td>
+          <td>${{ crypto.value }}</td>
         </tr>
       </tbody>
       <tfoot>
         <tr>
           <td></td>
           <td>Total</td>
-          <td>${{ moneyTotal.toFixed(2) }}</td>
+          <td>${{ moneyTotal }}</td>
         </tr>
       </tfoot>
     </table>
@@ -55,7 +55,7 @@ export default {
       this.tableData = this.availableCryptos.map((crypto) => ({
         code: crypto,
         name: this.cryptoList.find((item) => item.code === crypto).name,
-        amount: this.wallet[crypto],
+        amount: Math.round(this.wallet[crypto] * 10000) / 10000,
         value: 0, // seteado despues
       }));
     },

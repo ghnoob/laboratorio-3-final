@@ -3,180 +3,9 @@ import { createStore } from 'vuex';
 import { shallowMount, flushPromises } from '@vue/test-utils';
 import exchangeServices from '@/services/exchangeServices';
 import TransactionForm from '@/components/TransactionForm.vue';
-
-const mockTransactions = [
-  {
-    _id: '60eb149ba4666761000216fc',
-    crypto_code: 'usdc',
-    crypto_amount: '1.01',
-    money: '170.98',
-    user_id: 'valor_introducido_login',
-    action: 'sale',
-    datetime: '2021-11-07T20:50:00.000Z',
-  },
-  {
-    _id: '60eb148da4666761000216f9',
-    crypto_code: 'usdc',
-    crypto_amount: '2.01',
-    money: '165.23',
-    user_id: 'valor_introducido_login',
-    action: 'purchase',
-    datetime: '2021-11-07T17:50:00.000Z',
-  },
-  {
-    _id: '60eb148da4666761000216f1',
-    crypto_code: 'eth',
-    crypto_amount: '0.07',
-    money: '26784.1',
-    user_id: 'valor_introducido_login',
-    action: 'purchase',
-    datetime: '2021-07-24T17:47:00.000Z',
-  },
-  {
-    _id: '60eb148da4666761000216f7',
-    crypto_code: 'btc',
-    crypto_amount: '0.01',
-    money: '58447',
-    user_id: 'valor_introducido_login',
-    action: 'purchase',
-    datetime: '2021-11-11T17:50:00.000Z',
-  },
-  {
-    _id: '60eb148da4666761000216f5',
-    crypto_code: 'btc',
-    crypto_amount: '0.02',
-    money: '116894',
-    user_id: 'valor_introducido_login',
-    action: 'purchase',
-    datetime: '2021-11-12T17:50:00.000Z',
-  },
-];
-
-const mockPrices = [
-  {
-    code: 'btc',
-    exchanges: [
-      {
-        exchange: 'satoshitango',
-        bid: 5394165,
-        ask: 5736558.69,
-      },
-      {
-        exchange: 'sesocio',
-        bid: 5569884.73,
-        ask: 5744973.91,
-      },
-    ],
-  },
-  {
-    code: 'dai',
-    exchanges: [
-      {
-        exchange: 'satoshitango',
-        bid: 166.81,
-        ask: 177.32,
-      },
-      {
-        exchange: 'sesocio',
-        bid: 169.53,
-        ask: 178.62,
-      },
-    ],
-  },
-  {
-    code: 'eth',
-    exchanges: [
-      {
-        exchange: 'satoshitango',
-        bid: 336427.37,
-        ask: 358024.52,
-      },
-      {
-        exchange: 'sesocio',
-        bid: 342712.5,
-        ask: 359623.4,
-      },
-    ],
-  },
-  {
-    code: 'usdc',
-    exchanges: [
-      {
-        exchange: 'satoshitango',
-        bid: 166.82,
-        ask: 177.44,
-      },
-      {
-        exchange: 'sesocio',
-        bid: 169.53,
-        ask: 178.62,
-      },
-    ],
-  },
-];
-
-const newMockPrices = [
-  {
-    code: 'btc',
-    exchanges: [
-      {
-        exchange: 'satoshitango',
-        bid: 5394132,
-        ask: 5736512.69,
-      },
-      {
-        exchange: 'sesocio',
-        bid: 5569832.73,
-        ask: 5744910.91,
-      },
-    ],
-  },
-  {
-    code: 'dai',
-    exchanges: [
-      {
-        exchange: 'satoshitango',
-        bid: 176.81,
-        ask: 189.32,
-      },
-      {
-        exchange: 'sesocio',
-        bid: 177.53,
-        ask: 190.62,
-      },
-    ],
-  },
-  {
-    code: 'eth',
-    exchanges: [
-      {
-        exchange: 'satoshitango',
-        bid: 336433.37,
-        ask: 358011.52,
-      },
-      {
-        exchange: 'sesocio',
-        bid: 342713.5,
-        ask: 359624.4,
-      },
-    ],
-  },
-  {
-    code: 'usdc',
-    exchanges: [
-      {
-        exchange: 'satoshitango',
-        bid: 166.82,
-        ask: 179.44,
-      },
-      {
-        exchange: 'sesocio',
-        bid: 169.53,
-        ask: 175.62,
-      },
-    ],
-  },
-];
+import mockTransactions from './mocks/mockTransactions';
+import { mockPrices, newMockPrices } from './mocks/mockPrices';
+import mockCryptoCodes from './mocks/mockCryptoCodes';
 
 describe('TransactionForm.vue', () => {
   const store = createStore({
@@ -184,12 +13,7 @@ describe('TransactionForm.vue', () => {
       username: 'valor_introducido_login',
       transactions: mockTransactions,
       prices: mockPrices,
-      cryptoCodes: [
-        { code: 'btc', name: 'Bitcoin', color: '#ff9315' },
-        { code: 'dai', name: 'Dai', color: '#fd024f' },
-        { code: 'eth', name: 'Ethereum', color: '#5b73a0' },
-        { code: 'usdc', name: 'USD Coin', color: '#2775ca' },
-      ],
+      cryptoCodes: mockCryptoCodes,
     },
     mutations: {
       setPrices(state, newPrices) {
@@ -268,7 +92,7 @@ describe('TransactionForm.vue', () => {
 
     const cryptoCode = wrapper.find('#crypto-code');
     await cryptoCode.setValue('usdc');
-    expect(cryptoAmountLabel.text()).toBe('Cantidad de criptomonedas a vender (max. 1)');
+    expect(cryptoAmountLabel.text()).toBe('Cantidad de criptomonedas a vender (max. 0)');
 
     await cryptoCode.setValue('eth');
     expect(cryptoAmountLabel.text()).toBe('Cantidad de criptomonedas a vender (max. 0.07)');
@@ -310,7 +134,7 @@ describe('TransactionForm.vue', () => {
     expect(action.element.value).toBe('sale');
 
     expect(wrapper.find('#crypto-code').element.value).toBe('usdc');
-    expect(wrapper.find('label[for="crypto-amount"]').text()).toBe('Cantidad de criptomonedas a vender (max. 2.01)');
+    expect(wrapper.find('label[for="crypto-amount"]').text()).toBe('Cantidad de criptomonedas a vender (max. 1.01)');
     expect(wrapper.find('#crypto-amount').element.value).toBe('1.01');
 
     const exchange = wrapper.find('#exchange');

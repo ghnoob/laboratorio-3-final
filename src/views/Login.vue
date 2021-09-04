@@ -9,8 +9,6 @@
 </template>
 
 <script>
-import apiServices from '../services/apiServices';
-
 export default {
   data() {
     return {
@@ -18,27 +16,16 @@ export default {
     };
   },
 
-  created() {
+  mounted() {
+    sessionStorage.removeItem('username');
     this.$store.commit('setUsername', '');
     this.$store.commit('setTransactions', []);
   },
 
   methods: {
-    async pullTransactions() {
-      try {
-        this.$toast.show('Cargando...', { duration: false });
-        const response = await apiServices.getTransactions(this.username);
-        this.$store.commit('setTransactions', response.data);
-        this.$toast.clear();
-        this.$toast.success('Datos cargados');
-      } catch (error) {
-        this.$toast.clear();
-        this.$toast.error(error.toString());
-      }
-    },
     onSubmit() {
       this.$store.commit('setUsername', this.username);
-      this.pullTransactions();
+      sessionStorage.setItem('username', this.username);
       this.$router.push({ name: 'Home' });
     },
   },

@@ -24,10 +24,16 @@
 
 <script>
 import exchangeServices from './services/exchangeServices';
+import apiServices from './services/apiServices';
 
 export default {
   mounted() {
     this.loadPrices();
+    const username = sessionStorage.getItem('username');
+    if (username) {
+      this.$store.commit('setUsername', username);
+      this.pullTransactions();
+    }
   },
   methods: {
     async loadPrices() {
@@ -42,6 +48,18 @@ export default {
         this.$toast.error(error.toString());
       }
     },
+    async pullTransactions() {
+      try {
+        this.$toast.show('Cargando...', { duration: false });
+        const response = await apiServices.getTransactions(this.username);
+        this.$store.commit('setTransactions', response.data);
+        this.$toast.clear();
+        this.$toast.success('Datos cargados');
+      } catch (error) {
+        this.$toast.clear();
+        this.$toast.error(error.toString());
+      }
+    },
   },
   computed: {
     username() {
@@ -51,7 +69,14 @@ export default {
       return this.$store.state.transactions;
     },
     isLoggedIn() {
-      return this.username.length > 0;
+      return Boolean(this.username);
+    },
+  },
+  watch: {
+    username(value) {
+      if (value) {
+        this.pullTransactions();
+      }
     },
   },
 };

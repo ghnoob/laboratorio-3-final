@@ -47,7 +47,7 @@ export default {
   },
   mounted() {
     if (this.renderTable) {
-      this.onMount();
+      this.loadData();
     }
   },
   methods: {
@@ -65,7 +65,7 @@ export default {
         item.value = Math.round((response.data.totalBid * item.amount) * 100) / 100;
       }));
     },
-    async onMount() {
+    async loadData() {
       try {
         this.$toast.show('Cargando cartera...');
         this.fillTableData();
@@ -123,6 +123,13 @@ export default {
     },
     renderTable() {
       return this.availableCryptos.length > 0;
+    },
+  },
+  watch: {
+    renderTable(value) {
+      if (value) {
+        this.loadData();
+      }
     },
   },
 };

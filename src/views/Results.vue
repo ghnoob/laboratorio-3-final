@@ -34,7 +34,7 @@ export default {
   },
   mounted() {
     if (this.renderTable) {
-      this.onMount();
+      this.loadData();
     }
   },
   methods: {
@@ -70,7 +70,7 @@ export default {
         item.result = Math.round((currentValue - spendings + income) * 100) / 100;
       }));
     },
-    async onMount() {
+    async loadData() {
       try {
         this.$toast.show('Cargando resultados', { duration: false });
         this.fillTableData();
@@ -115,6 +115,13 @@ export default {
       });
 
       return wallet;
+    },
+  },
+  watch: {
+    renderTable(value) {
+      if (value) {
+        this.loadData();
+      }
     },
   },
 };

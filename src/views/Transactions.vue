@@ -139,18 +139,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.buttons-container {
-  width: max-content;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
-  margin: auto;
-  margin-top: 20px;
-}
-
-.selected {
-  background-color: #42b983;
-}
-</style>

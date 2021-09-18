@@ -134,11 +134,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.chart-container {
-  max-width: 35%;
-  margin: auto;
-  margin-top: 5em;
-}
-</style>

@@ -15,27 +15,3 @@
     </nav>
   </div>
 </template>
-
-<style scoped>
-nav {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-}
-.link {
-  padding: 0.3em;
-}
-a {
-  color: #2c3e50;
-}
-a:visited {
-  color: #2c3e50;
-}
-a:hover {
-  color: black;
-}
-a:active {
-  color: #2c3e50;
-}
-
-</style>

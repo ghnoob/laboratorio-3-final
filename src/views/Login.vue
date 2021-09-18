@@ -31,24 +31,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.login {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-flow: column wrap;
-  height: 100%;
-}
-
-.login form {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: max-content;
-}
-
-input {
-  height: auto;
-}
-</style>

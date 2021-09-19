@@ -1,7 +1,7 @@
 <template>
   <h1>Cartera</h1>
-  <div v-if="renderTable">
-    <table class="green-table">
+  <div v-if="renderTable" class="table-responsive">
+    <table class="table">
       <thead>
         <tr>
           <th>Criptomoneda</th>
@@ -20,12 +20,12 @@
         <tr>
           <td></td>
           <td>Total</td>
-          <td>${{ moneyTotal }}</td>
+          <td>${{ moneyTotal.toFixed(2) }}</td>
         </tr>
       </tfoot>
     </table>
-    <div class="chart-container" v-if="renderChart">
-      <h2>Composición de la cartera</h2>
+    <h2>Composición de la cartera</h2>
+    <div class="chart-container m-auto mw-75" v-if="renderChart">
       <wallet-chart :chart-data="chartData" :chart-options="{ responsive: true }" />
     </div>
   </div>
@@ -134,3 +134,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@media screen and (min-width: 768px) {
+  .chart-container {
+    max-width: 50%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .chart-container {
+    max-width: 35%;
+  }
+}
+</style>

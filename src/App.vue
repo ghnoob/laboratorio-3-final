@@ -1,25 +1,98 @@
 <template>
-  <div class="content">
-    <div v-if="isLoggedIn">
+  <div class="d-flex flex-column min-vh-100">
+    <div class="flex-grow-1">
       <header>
-        <p class="username">{{ username }}</p>
+        <div v-if="isLoggedIn">
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+              <div class="nav-item dropdown navbar-brand">
+                <a
+                  class="nav-link dropdown-toggle text-dark"
+                  href="#" id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <font-awesome-icon icon="user" />{{ username }}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <router-link class="dropdown-item" :to="{ name: 'Login' }">
+                      Cerrar Sesión
+                    </router-link>
+                  </li>
+                </ul>
+              </div>
+              <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+              >
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <router-link class="nav-link" aria-current="page" :to="{ name: 'Home' }">
+                      Inicio
+                    </router-link>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a
+                      class="nav-link dropdown-toggle"
+                      href="#" id="navbarDropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      Transacciones
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li>
+                        <router-link class="dropdown-item" :to="{ name: 'Transactions' }">
+                          Ver, modificar y eliminar
+                        </router-link>
+                      </li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li>
+                        <router-link class="dropdown-item" :to="{ name: 'Buy' }">
+                          Comprar
+                        </router-link>
+                      </li>
+                      <li>
+                        <router-link class="dropdown-item" :to="{ name: 'Sell' }">
+                          Vender
+                        </router-link>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item">
+                    <router-link class="nav-link" :to="{ name: 'Wallet' }">Cartera</router-link>
+                  </li>
+                  <li class="nav-item">
+                    <router-link class="nav-link" :to="{ name: 'Results' }">Resultados</router-link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
+        <nav v-else-if="$route.name !== 'Login'" class="navbar navbar-light bg-light">
+          <router-link class="nav-link" :to="{ name: 'Login' }">Iniciar sesión</router-link>
+        </nav>
       </header>
-      <nav id="nav">
-        <router-link class="link" :to="{ name: 'Home' }">Home</router-link> |
-        <router-link class="link" :to="{ name: 'Transactions' }">Transacciones</router-link> |
-        <router-link class="link" :to="{ name: 'Wallet' }">Cartera</router-link> |
-        <router-link class="link" :to="{ name: 'Results' }">Resultados</router-link> |
-        <router-link class="link" :to="{ name: 'Login' }">Cerrar sesión</router-link>
-      </nav>
+      <main>
+        <router-view/>
+      </main>
     </div>
-    <nav id="nav" v-else-if="$route.name !== 'Login'">
-      <router-link class="link" :to="{ name: 'Login' }">Iniciar sesión</router-link>
-    </nav>
-    <router-view/>
+    <footer class="footer mt-auto py-3 bg-light text-center">
+      <p>Laboratorio de Computación III - Rodrigo Pietnechuk - Trabajo Final</p>
+    </footer>
   </div>
-  <footer>
-    <p>Laboratorio de Computación III - Rodrigo Pietnechuk - Trabajo Final</p>
-  </footer>
 </template>
 
 <script>
@@ -81,3 +154,25 @@ export default {
   },
 };
 </script>
+
+<style>
+a.router-link-exact-active {
+  color: #000000 !important;
+}
+
+.footer {
+  font-size: x-small;
+}
+
+@media screen and (min-width: 480px) {
+  .footer {
+    font-size: small;
+  }
+}
+
+  @media screen and (min-width: 600px) {
+  .footer {
+    font-size: medium;
+  }
+}
+</style>

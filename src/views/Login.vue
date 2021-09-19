@@ -1,9 +1,19 @@
 <template>
-  <div class="login">
-    <h1>Iniciar sesión</h1>
+  <div class="container-sm">
+    <h1 class="text-center">Iniciar sesión</h1>
     <form @submit.prevent="onSubmit">
-      <input placeholder="Usuario" v-model.trim="username" required>
-      <button type="submit">Iniciar sesión</button>
+      <div class="input-group">
+        <span class="input-group-text">@</span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Usuario"
+          aria-label="Usuario"
+          v-model.trim="username"
+          required
+        >
+        <button class="btn btn-primary" type="submit">Iniciar sesión</button>
+      </div>
     </form>
   </div>
 </template>

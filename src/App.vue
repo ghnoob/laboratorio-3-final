@@ -1,6 +1,9 @@
 <template>
   <div class="d-flex flex-column min-vh-100">
-    <div class="flex-grow-1">
+    <div
+      class="d-flex flex-column flex-grow-1 main-content"
+      :class="{ 'justify-content-center' : inLoginRoute }"
+    >
       <header>
         <div v-if="isLoggedIn">
           <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -81,7 +84,7 @@
             </div>
           </nav>
         </div>
-        <nav v-else-if="$route.name !== 'Login'" class="navbar navbar-light bg-light">
+        <nav v-else-if="!inLoginRoute" class="navbar navbar-light bg-light">
           <router-link class="nav-link" :to="{ name: 'Login' }">Iniciar sesión</router-link>
         </nav>
       </header>
@@ -143,6 +146,9 @@ export default {
     },
     isLoggedIn() {
       return Boolean(this.username);
+    },
+    inLoginRoute() {
+      return this.$route.name === 'Login';
     },
   },
   watch: {

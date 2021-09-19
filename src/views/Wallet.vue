@@ -4,14 +4,14 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Criptomoneda</th>
-          <th>Cantidad</th>
-          <th>Dinero</th>
+          <th scope="column">Criptomoneda</th>
+          <th scope="column">Cantidad</th>
+          <th scope="column">Dinero</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="crypto in tableData" :key="crypto.code">
-          <td>{{ crypto.name }}</td>
+          <th scope="row">{{ crypto.name }}</th>
           <td>{{ crypto.amount }}</td>
           <td>${{ crypto.value }}</td>
         </tr>
@@ -19,7 +19,7 @@
       <tfoot>
         <tr>
           <td></td>
-          <td>Total</td>
+          <th scope="row">Total</th>
           <td>${{ moneyTotal.toFixed(2) }}</td>
         </tr>
       </tfoot>

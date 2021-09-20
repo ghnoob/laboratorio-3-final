@@ -4,6 +4,7 @@ import Results from '@/views/Results.vue';
 import mockCryptoCodes from './mocks/mockCryptoCodes';
 import mockTransactions from './mocks/mockTransactions';
 import mockResponses from './mocks/mockResponses';
+import $toast from './mocks/toast';
 
 describe('Results.vue', () => {
   const $store = {
@@ -11,13 +12,6 @@ describe('Results.vue', () => {
       transactions: [],
       cryptoCodes: mockCryptoCodes,
     },
-  };
-
-  const $toast = {
-    show: jest.fn(),
-    error: jest.fn(),
-    clear: jest.fn(),
-    success: jest.fn(),
   };
 
   describe('Sin transacciones previas', () => {
@@ -58,25 +52,25 @@ describe('Results.vue', () => {
       expect($toast.clear).toHaveBeenCalled();
       expect($toast.success).toHaveBeenCalled();
 
-      const cells = wrapper.findAll('tbody td');
+      const cells = wrapper.findAll('tbody td, tbody th');
 
       expect(cells.length).toBe(6);
 
       expect(cells[0].text()).toBe('Bitcoin');
       expect(cells[1].text()).toBe('$-3162.47');
-      expect(cells[1].attributes('class')).toBe('red');
+      expect(cells[1].attributes('class')).toBe('table-danger');
 
       expect(cells[2].text()).toBe('Ethereum');
       expect(cells[3].text()).toBe('$-2453.36');
-      expect(cells[3].attributes('class')).toBe('red');
+      expect(cells[3].attributes('class')).toBe('table-danger');
 
       expect(cells[4].text()).toBe('USD Coin');
       expect(cells[5].text()).toBe('$5.75');
-      expect(cells[5].attributes('class')).not.toBe('red');
+      expect(cells[5].attributes('class')).toBe('table-success');
 
       const total = wrapper.find('tfoot td:nth-child(2)');
       expect(total.text()).toBe('$-5610.08');
-      expect(total.attributes('class')).toBe('red');
+      expect(total.attributes('class')).toBe('table-danger');
     });
 
     it('Si hay un error se muestra un mensaje', async () => {

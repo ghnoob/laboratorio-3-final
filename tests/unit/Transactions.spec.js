@@ -4,6 +4,7 @@ import Transactions from '@/views/Transactions.vue';
 import mockRouter from './mocks/mockRouter';
 import mockCryptoCodes from './mocks/mockCryptoCodes';
 import mockTransactions from './mocks/mockTransactions';
+import $toast from './mocks/toast';
 
 describe('Transactions.vue', () => {
   const $store = {
@@ -32,13 +33,6 @@ describe('Transactions.vue', () => {
     beforeAll(() => {
       $store.state.transactions = mockTransactions;
     });
-
-    const $toast = {
-      show: jest.fn(),
-      clear: jest.fn(),
-      error: jest.fn(),
-      success: jest.fn(),
-    };
 
     it('Los datos de la tabla se renderizan correctamente', () => {
       const wrapper = shallowMount(Transactions, {

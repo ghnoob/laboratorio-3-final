@@ -2,6 +2,7 @@ import { shallowMount, flushPromises } from '@vue/test-utils';
 import apiServices from '@/services/apiServices';
 import Buy from '@/views/Buy.vue';
 import TransactionForm from '@/components/TransactionForm.vue';
+import $toast from './mocks/toast';
 
 describe('Buy.vue', () => {
   const mockTransaction = {
@@ -22,13 +23,6 @@ describe('Buy.vue', () => {
 
   const $store = {
     commit: jest.fn(),
-  };
-
-  const $toast = {
-    show: jest.fn(),
-    error: jest.fn(),
-    clear: jest.fn(),
-    success: jest.fn(),
   };
 
   const $router = {

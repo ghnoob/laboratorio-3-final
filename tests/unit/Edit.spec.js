@@ -2,6 +2,7 @@ import { shallowMount, flushPromises } from '@vue/test-utils';
 import apiServices from '@/services/apiServices';
 import Edit from '@/views/Edit.vue';
 import TransactionForm from '@/components/TransactionForm.vue';
+import $toast from './mocks/toast';
 
 describe('Edit.vue', () => {
   const $route = {
@@ -20,13 +21,6 @@ describe('Edit.vue', () => {
 
   const $store = {
     commit: jest.fn(),
-  };
-
-  const $toast = {
-    show: jest.fn(),
-    error: jest.fn(),
-    clear: jest.fn(),
-    success: jest.fn(),
   };
 
   const $router = {

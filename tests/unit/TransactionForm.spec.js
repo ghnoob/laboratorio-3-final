@@ -6,6 +6,7 @@ import TransactionForm from '@/components/TransactionForm.vue';
 import mockTransactions from './mocks/mockTransactions';
 import { mockPrices, newMockPrices } from './mocks/mockPrices';
 import mockCryptoCodes from './mocks/mockCryptoCodes';
+import $toast from './mocks/toast';
 
 describe('TransactionForm.vue', () => {
   const store = createStore({
@@ -21,13 +22,6 @@ describe('TransactionForm.vue', () => {
       },
     },
   });
-
-  const $toast = {
-    show: jest.fn(),
-    clear: jest.fn(),
-    error: jest.fn(),
-    success: jest.fn(),
-  };
 
   afterEach(() => jest.clearAllMocks());
 

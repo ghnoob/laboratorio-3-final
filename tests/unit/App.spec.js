@@ -2,6 +2,7 @@ import { shallowMount, flushPromises } from '@vue/test-utils';
 import exchangeServices from '@/services/exchangeServices';
 import App from '@/App.vue';
 import apiServices from '@/services/apiServices';
+import $toast from './mocks/toast';
 
 describe('App.vue', () => {
   const $store = {
@@ -11,13 +12,6 @@ describe('App.vue', () => {
       prices: [],
     },
     commit: jest.fn(),
-  };
-
-  const $toast = {
-    show: jest.fn(),
-    error: jest.fn(),
-    clear: jest.fn(),
-    success: jest.fn(),
   };
 
   beforeAll(() => {
@@ -31,7 +25,7 @@ describe('App.vue', () => {
       const wrapper = shallowMount(App, {
         global: {
           mocks: { $store, $route, $toast },
-          stubs: ['router-link', 'router-view'],
+          stubs: ['router-link', 'router-view', 'font-awesome-icon'],
         },
       });
 
@@ -58,12 +52,12 @@ describe('App.vue', () => {
       const wrapper = shallowMount(App, {
         global: {
           mocks: { $store, $route, $toast },
-          stubs: ['router-link', 'router-view'],
+          stubs: ['router-link', 'router-view', 'font-awesome-icon'],
         },
       });
 
       expect(wrapper.find('p .username').exists()).toBe(false);
-      expect(wrapper.findAll('.link').length).toBe(1);
+      expect(wrapper.findAll('.nav-link').length).toBe(1);
     });
   });
 
@@ -73,19 +67,21 @@ describe('App.vue', () => {
       sessionStorage.setItem('username', 'test');
     });
 
+    const $route = { name: 'Home' };
+
     it('Se muestran los links para navegar libremente por la página', () => {
       const wrapper = shallowMount(App, {
         global: {
-          mocks: { $store, $toast },
-          stubs: ['router-link', 'router-view'],
+          mocks: { $store, $route, $toast },
+          stubs: ['router-link', 'router-view', 'font-awesome-icon'],
         },
       });
 
-      const username = wrapper.find('p.username');
+      const username = wrapper.find('.navbar-brand');
       expect(username.exists()).toBe(true);
       expect(username.text()).toBe('test');
 
-      expect(wrapper.findAll('.link').length).toBe(5);
+      expect(wrapper.findAll('.nav-link').length).toBe(5);
 
       expect($store.commit).toHaveBeenCalled();
       expect($store.commit).toHaveBeenCalledWith('setUsername', 'test');
@@ -101,8 +97,8 @@ describe('App.vue', () => {
 
       shallowMount(App, {
         global: {
-          mocks: { $store, $toast },
-          stubs: ['router-link', 'router-view'],
+          mocks: { $store, $toast, $route },
+          stubs: ['router-link', 'router-view', 'font-awesome-icon'],
         },
       });
 

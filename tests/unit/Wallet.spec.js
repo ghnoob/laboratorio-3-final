@@ -4,6 +4,7 @@ import Wallet from '@/views/Wallet.vue';
 import mockCryptoCodes from './mocks/mockCryptoCodes';
 import mockTransactions from './mocks/mockTransactions';
 import mockResponses from './mocks/mockResponses';
+import $toast from './mocks/toast';
 
 describe('Wallet.vue', () => {
   const $store = {
@@ -11,13 +12,6 @@ describe('Wallet.vue', () => {
       transactions: [],
       cryptoCodes: mockCryptoCodes,
     },
-  };
-
-  const $toast = {
-    show: jest.fn(),
-    error: jest.fn(),
-    clear: jest.fn(),
-    success: jest.fn(),
   };
 
   describe('Cartera vacía', () => {
@@ -62,7 +56,7 @@ describe('Wallet.vue', () => {
       expect($toast.clear).toHaveBeenCalled();
       expect($toast.success).toHaveBeenCalled();
 
-      const cells = wrapper.findAll('tbody td');
+      const cells = wrapper.findAll('tbody td, tbody th');
 
       expect(cells.length).toBe(6);
 

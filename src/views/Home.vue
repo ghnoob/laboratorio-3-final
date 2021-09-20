@@ -1,17 +1,28 @@
 <template>
   <div class="home">
     <h1>Inicio</h1>
-    <h2>¿Qué desea hacer?</h2>
-    <nav>
-      <router-link class="link" :to="{ name: 'Buy' }">Comprar criptomonedas</router-link>
-      <router-link class="link" :to="{ name: 'Sell' }">Vender criptomonedas</router-link>
-      <router-link class="link" :to="{ name: 'Transactions' }">
-        Ver, modificar y eliminar las transacciones realizadas
-      </router-link>
-      <router-link :to="{ name: 'Wallet' }">Consultar los fondos disponibles</router-link>
-      <router-link :to="{ name: 'Results' }">
-        Consultar los resultados de las inversiones
-      </router-link>
-    </nav>
+    <h2 class="text-center">Precios actuales</h2>
+    <div class="container">
+      <currency-widget
+        class="mb-2"
+        v-for="crypto in cryptoCodes"
+        :key="crypto.code"
+        :currencyId="crypto.id"
+      >
+      </currency-widget>
+    </div>
   </div>
 </template>
+
+<script>
+import CurrencyWidget from '../components/CurrencyWidget.vue';
+
+export default {
+  components: { CurrencyWidget },
+  computed: {
+    cryptoCodes() {
+      return this.$store.state.cryptoCodes;
+    },
+  },
+};
+</script>

@@ -1,25 +1,101 @@
 <template>
-  <div class="content">
-    <div v-if="isLoggedIn">
+  <div class="d-flex flex-column min-vh-100">
+    <div
+      class="d-flex flex-column flex-grow-1 main-content"
+      :class="{ 'justify-content-center' : inLoginRoute }"
+    >
       <header>
-        <p class="username">{{ username }}</p>
+        <div v-if="isLoggedIn">
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+              <div class="nav-item dropdown navbar-brand">
+                <a
+                  class="nav-link dropdown-toggle text-dark"
+                  href="#" id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <font-awesome-icon icon="user" />{{ username }}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <router-link class="dropdown-item" :to="{ name: 'Login' }">
+                      Cerrar Sesión
+                    </router-link>
+                  </li>
+                </ul>
+              </div>
+              <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+              >
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <router-link class="nav-link" aria-current="page" :to="{ name: 'Home' }">
+                      Inicio
+                    </router-link>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a
+                      class="nav-link dropdown-toggle"
+                      href="#" id="navbarDropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      Transacciones
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li>
+                        <router-link class="dropdown-item" :to="{ name: 'Transactions' }">
+                          Ver, modificar y eliminar
+                        </router-link>
+                      </li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li>
+                        <router-link class="dropdown-item" :to="{ name: 'Buy' }">
+                          Comprar
+                        </router-link>
+                      </li>
+                      <li>
+                        <router-link class="dropdown-item" :to="{ name: 'Sell' }">
+                          Vender
+                        </router-link>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item">
+                    <router-link class="nav-link" :to="{ name: 'Wallet' }">Cartera</router-link>
+                  </li>
+                  <li class="nav-item">
+                    <router-link class="nav-link" :to="{ name: 'Results' }">Resultados</router-link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
+        <nav v-else-if="!inLoginRoute" class="navbar navbar-light bg-light">
+          <router-link class="nav-link" :to="{ name: 'Login' }">Iniciar sesión</router-link>
+        </nav>
       </header>
-      <nav id="nav">
-        <router-link class="link" :to="{ name: 'Home' }">Home</router-link> |
-        <router-link class="link" :to="{ name: 'Transactions' }">Transacciones</router-link> |
-        <router-link class="link" :to="{ name: 'Wallet' }">Cartera</router-link> |
-        <router-link class="link" :to="{ name: 'Results' }">Resultados</router-link> |
-        <router-link class="link" :to="{ name: 'Login' }">Cerrar sesión</router-link>
-      </nav>
+      <main>
+        <router-view/>
+      </main>
     </div>
-    <nav id="nav" v-else-if="$route.name !== 'Login'">
-      <router-link class="link" :to="{ name: 'Login' }">Iniciar sesión</router-link>
-    </nav>
-    <router-view/>
+    <footer class="footer mt-auto py-3 bg-light text-center">
+      <p>Laboratorio de Computación III - Rodrigo Pietnechuk - Trabajo Final</p>
+    </footer>
   </div>
-  <footer>
-    <p>Laboratorio de Computación III - Rodrigo Pietnechuk - Trabajo Final</p>
-  </footer>
 </template>
 
 <script>
@@ -71,6 +147,9 @@ export default {
     isLoggedIn() {
       return Boolean(this.username);
     },
+    inLoginRoute() {
+      return this.$route.name === 'Login';
+    },
   },
   watch: {
     username(value) {
@@ -83,131 +162,23 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+a.router-link-exact-active {
+  color: #000000 !important;
 }
 
-.content {
-  flex: 1;
+.footer {
+  font-size: x-small;
 }
 
-#nav {
-  padding: 30px;
+@media screen and (min-width: 480px) {
+  .footer {
+    font-size: small;
+  }
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-
-button {
-  background:linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
-  background-color:#77b55a;
-  border-radius:4px;
-  border:1px solid #4b8f29;
-  display:inline-block;
-  cursor:pointer;
-  color:#ffffff;
-  font-family:Arial;
-  font-size:13px;
-  font-weight:bold;
-  padding:6px 12px;
-  text-decoration:none;
-  text-shadow:0px 1px 0px #5b8a3c;
-  margin: 2px;
-}
-button:hover {
-  background:linear-gradient(to bottom, #72b352 5%, #77b55a 100%);
-  background-color:#72b352;
-}
-button:active {
-  position:relative;
-  top:1px;
-}
-button:disabled,
-button[disabled]{
-  border: 1px solid #999999;
-  background: #cccccc;
-  color: #666666;
-  text-shadow: unset;
-  cursor: not-allowed;
-}
-button:disabled:active,
-button[disabled]:active {
-  top: 0px;
-}
-.username {
-  text-align: right;
-}
-
-table.green-table {
-  border: 2px solid #24943a;
-  background-color: #d4eed1;
-  text-align: center;
-  margin: auto;
-  cursor: default;
-}
-
-table.green-table td,
-table.green-table th {
-  border: 1px solid #24943a;
-  padding: 3px 2px;
-}
-
-table.green-table tbody td {
-  font-size: 13px;
-}
-
-table.green-table thead {
-  background: #24943a;
-  background: -moz-linear-gradient(top, #5baf6b 0%, #3a9e4d 66%, #24943a 100%);
-  background: -webkit-linear-gradient(
-    top,
-    #5baf6b 0%,
-    #3a9e4d 66%,
-    #24943a 100%
-  );
-  background: linear-gradient(to bottom, #5baf6b 0%, #3a9e4d 66%, #24943a 100%);
-  border-bottom: 0px solid #444444;
-}
-
-table.green-table thead th {
-  font-size: 19px;
-  font-weight: bold;
-  color: #f0f0f0;
-  text-align: left;
-  border-left: 2px solid #24943a;
-}
-
-table.green-table thead th:first-child {
-  border-left: none;
-}
-
-table.green-table tfoot tr td {
-  font-size: 13px;
-  font-weight: bold;
-}
-
-table.green-table tfoot .links {
-  text-align: right;
-}
-
-table.green-table tfoot .links a {
-  display: inline-block;
-  background: #ffffff;
-  color: #24943a;
-  padding: 2px 8px;
-  border-radius: 5px;
+  @media screen and (min-width: 600px) {
+  .footer {
+    font-size: medium;
+  }
 }
 </style>

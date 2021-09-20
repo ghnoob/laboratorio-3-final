@@ -1,54 +1,64 @@
 <template>
-  <h1>Transacciones</h1>
-  <div v-if="renderTable">
-    <table class="green-table">
-      <thead>
-        <tr>
-          <th>Criptomoneda</th>
-          <th>Monto</th>
-          <th>Valor en ARS</th>
-          <th>Acción</th>
-          <th>Fecha y hora</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="transaction in transactions"
-          :key="transaction._id"
-          @click="rowClick(transaction._id)"
-          :class="{ selected: selectedId === transaction._id }"
+  <div class="transactions m-1">
+    <h1>Transacciones</h1>
+    <div v-if="renderTable">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Criptomoneda</th>
+              <th>Monto</th>
+              <th>Valor en ARS</th>
+              <th>Acción</th>
+              <th>Fecha y hora</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="transaction in transactions"
+              :key="transaction._id"
+              @click="rowClick(transaction._id)"
+              :class="{ 'bg-primary text-light': selectedId === transaction._id }"
+            >
+              <td>{{ getCryptoName(transaction.crypto_code) }}</td>
+              <td>{{ transaction.crypto_amount }}</td>
+              <td>{{ transaction.money }}</td>
+              <td>{{ getAction(transaction.action) }}</td>
+              <td>{{ getLocalizedDateTime(transaction.datetime) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-around">
+        <router-link :to="{ name: 'Buy' }">
+          <button class="btn btn-primary btn-sm" type="button">Comprar</button>
+        </router-link>
+        <router-link :to="{ name: 'Sell' }">
+          <button class="btn btn-primary btn-sm" type="button">Vender</button>
+        </router-link>
+        <router-link :to="{ name: 'Edit', query: { id: selectedId } }">
+          <button
+            class="btn btn-warning btn-sm"
+            id="edit"
+            type="button"
+            :disabled="selectedId === null"
+          >
+            Editar
+          </button>
+        </router-link>
+        <button
+          id="delete"
+          class="btn btn-danger btn-sm"
+          type="button"
+          :disabled="!canDelete"
+          @click="deleteTransaction"
         >
-          <td>{{ getCryptoName(transaction.crypto_code) }}</td>
-          <td>{{ transaction.crypto_amount }}</td>
-          <td>{{ transaction.money }}</td>
-          <td>{{ getAction(transaction.action) }}</td>
-          <td>{{ getLocalizedDateTime(transaction.datetime) }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="buttons-container">
-      <router-link :to="{ name: 'Buy' }">
-        <button type="button">Comprar</button>
-      </router-link>
-      <router-link :to="{ name: 'Sell' }">
-        <button type="button">Vender</button>
-      </router-link>
-      <router-link :to="{ name: 'Edit', query: { id: selectedId } }">
-        <button id="edit" type="button" :disabled="selectedId === null">
-          Editar
+          Eliminar
         </button>
-      </router-link>
-      <button
-        id="delete"
-        type="button"
-        :disabled="!canDelete"
-        @click="deleteTransaction"
-      >
-        Eliminar
-      </button>
+      </div>
     </div>
+    <p v-else>No hay transacciones registradas hasta el momento.</p>
   </div>
-  <p v-else>No hay transacciones registradas hasta el momento.</p>
 </template>
 
 <script>
@@ -79,7 +89,13 @@ export default {
       return 'Venta';
     },
     getLocalizedDateTime(isoTime) {
-      return new Date(isoTime).toLocaleString();
+      return new Date(isoTime).toLocaleString([], {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
     },
     async deleteTransaction() {
       try {
@@ -139,18 +155,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.buttons-container {
-  width: max-content;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
-  margin: auto;
-  margin-top: 20px;
-}
-
-.selected {
-  background-color: #42b983;
-}
-</style>

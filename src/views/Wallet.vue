@@ -1,17 +1,17 @@
 <template>
   <h1>Cartera</h1>
-  <div v-if="renderTable">
-    <table class="green-table">
+  <div v-if="renderTable" class="table-responsive">
+    <table class="table">
       <thead>
         <tr>
-          <th>Criptomoneda</th>
-          <th>Cantidad</th>
-          <th>Dinero</th>
+          <th scope="column">Criptomoneda</th>
+          <th scope="column">Cantidad</th>
+          <th scope="column">Dinero</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="crypto in tableData" :key="crypto.code">
-          <td>{{ crypto.name }}</td>
+          <th scope="row">{{ crypto.name }}</th>
           <td>{{ crypto.amount }}</td>
           <td>${{ crypto.value }}</td>
         </tr>
@@ -19,13 +19,13 @@
       <tfoot>
         <tr>
           <td></td>
-          <td>Total</td>
-          <td>${{ moneyTotal }}</td>
+          <th scope="row">Total</th>
+          <td>${{ moneyTotal.toFixed(2) }}</td>
         </tr>
       </tfoot>
     </table>
-    <div class="chart-container" v-if="renderChart">
-      <h2>Composición de la cartera</h2>
+    <h2>Composición de la cartera</h2>
+    <div class="chart-container m-auto mw-75" v-if="renderChart">
       <wallet-chart :chart-data="chartData" :chart-options="{ responsive: true }" />
     </div>
   </div>
@@ -136,9 +136,15 @@ export default {
 </script>
 
 <style scoped>
-.chart-container {
-  max-width: 35%;
-  margin: auto;
-  margin-top: 5em;
+@media screen and (min-width: 768px) {
+  .chart-container {
+    max-width: 50%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .chart-container {
+    max-width: 35%;
+  }
 }
 </style>

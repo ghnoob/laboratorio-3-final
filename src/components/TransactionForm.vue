@@ -1,87 +1,100 @@
 <template>
   <div class="transaction">
-    <form @submit.prevent="$emit('submitted', newTransaction)">
-      <ul class="wrapper">
-        <li class="form-row" v-if="edit">
-          <label for="action">Acción</label>
-          <select id="action" v-model="newTransaction.action">
-            <option value="purchase">Comprar</option>
-            <option value="sale">Vender</option>
-          </select>
-        </li>
-        <li class="form-row">
-          <label for="crypto-code">Criptomoneda</label>
-          <select
-            id="crypto-code"
-            v-model="newTransaction.crypto_code"
-            required
+    <form @submit.prevent="$emit('submitted', newTransaction)" class="mx-1">
+      <div class="mb-3" v-if="edit">
+        <label class="form-label" for="action">Acción</label>
+        <select id="action" class="form-select" v-model="newTransaction.action">
+          <option value="purchase">Comprar</option>
+          <option value="sale">Vender</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="crypto-code">Criptomoneda</label>
+        <select
+          id="crypto-code"
+          class="form-select"
+          v-model="newTransaction.crypto_code"
+          required
+        >
+          <option v-for="crypto in cryptoList" :key="crypto.code" :value="crypto.code">
+            {{ crypto.name }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="crypto-amount">{{ cryptoAmountLabel }}</label>
+        <input
+          id="crypto-amount"
+          class="form-control"
+          type="number"
+          :min="minCryptoAmount"
+          :max="maxCryptoAmount"
+          step="any"
+          v-model="newTransaction.crypto_amount"
+          required
+          @input="setMoney"
+        >
+      </div>
+      <div class="mb-3" v-if="newTransaction.crypto_code !== ''">
+        <label class="form-label" for="exchange">Exchange</label>
+        <select id="exchange" class="form-select" v-model="exchangeRate" @change="setMoney">
+          <option
+            v-for="(item, i) in prices"
+            :key="item.exchange"
+            :value="item[priceType]"
           >
-            <option v-for="crypto in cryptoList" :key="crypto.code" :value="crypto.code">
-              {{ crypto.name }}
-            </option>
-          </select>
-        </li>
-        <li class="form-row">
-          <label for="crypto-amount">{{ cryptoAmountLabel }}</label>
-          <input
-            id="crypto-amount"
-            type="number"
-            :min="minCryptoAmount"
-            :max="maxCryptoAmount"
-            step="any"
-            v-model="newTransaction.crypto_amount"
-            required
-            @input="setMoney"
-          >
-        </li>
-        <li class="form-row" v-if="newTransaction.crypto_code !== ''">
-          <label for="exchange">Exchange</label>
-          <select id="exchange" v-model="exchangeRate" @change="setMoney">
-            <option
-              v-for="(item, i) in prices"
-              :key="item.exchange"
-              :value="item[priceType]"
-            >
-              {{ item.exchange }} - 1 {{ newTransaction.crypto_code.toUpperCase() }} =
-              {{ item[priceType] }} ARS {{i === 0 ? '(recomendado)' : ''}}
-            </option>
-            <option :value="null">otro</option>
-          </select>
-        </li>
-        <li class="form-row">
-          <label for="money">{{ moneyLabel }}</label>
-          <input
-            id="money"
-            type="number"
-            min="0"
-            step="0.01"
-            v-model="newTransaction.money"
-            required
-          >
-        </li>
-        <li class="form-row">
-          <label for="date">Fecha</label>
-          <input
-            id="date"
-            type="date"
-            v-model="date"
-            :max="todaysDate()"
-            autocomplete="off"
-            required
-          >
-        </li>
-        <li class="form-row">
-          <label for="time">Hora</label>
-          <input id="time" type="time" v-model="time" autocomplete="off" required>
-        </li>
-        <li class="form-row">
-          <button id="update" type="button" @click="updateExchanges">Refrescar exchanges</button>
-          <button type="submit">Aceptar</button>
+            {{ item.exchange }} - 1 {{ newTransaction.crypto_code.toUpperCase() }} =
+            {{ item[priceType] }} ARS {{i === 0 ? '(recomendado)' : ''}}
+          </option>
+          <option :value="null">otro</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="money">{{ moneyLabel }}</label>
+        <input
+          id="money"
+          class="form-control"
+          type="number"
+          min="0"
+          step="0.01"
+          v-model="newTransaction.money"
+          required
+        >
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="date">Fecha</label>
+        <input
+          id="date"
+          class="form-control"
+          type="date"
+          v-model="date"
+          :max="todaysDate()"
+          autocomplete="off"
+          required
+        >
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="time">Hora</label>
+        <input
+          class="form-control"
+          id="time"
+          type="time"
+          v-model="time"
+          autocomplete="off"
+          required
+        >
+      </div>
+      <div class="d-flex" role="group">
+        <button class="btn btn-secondary btn-sm" id="update" type="button" @click="updateExchanges">
+          Refrescar exchanges
+        </button>
+        <div class="ms-auto">
+          <button class="btn btn-primary btn-sm" type="submit">Aceptar</button>
           <router-link :to="{ name: 'Transactions' }">
-            <button type="button">Cancelar</button>
+            <button class="btn btn-secondary btn-sm" type="button">Cancelar</button>
           </router-link>
-        </li>
-      </ul>
+        </div>
+      </div>
     </form>
   </div>
 </template>
@@ -277,57 +290,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.wrapper {
-  background-color: whitesmoke;
-  list-style-type: none;
-  padding: 0;
-  border-radius: 3px;
-}
-.form-row {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0.5em;
-}
-
-button {
-  margin: 2px;
-  width: 80px;
-  height: 50px;
-  padding: 0.5em;
-}
-
-.form-row > label {
-  padding: 0.5em 1em 0.5em 0;
-  text-align: right;
-  flex: 1;
-}
-.form-row > input,
-.form-row > select {
-  flex: 2;
-}
-.form-row > input,
-.form-row > select {
-  padding: 0.5em;
-}
-
-@media screen and (min-width: 768px) {
-  .form-row > input,
-  .form-row > select {
-    flex: 3;
-  }
-}
-@media screen and (min-width: 992px) {
-  .form-row > input,
-  .form-row > select {
-    flex: 4;
-  }
-}
-@media screen and (min-width: 1200px) {
-  .form-row > input,
-  .form-row > select {
-    flex: 5;
-  }
-}
-</style>

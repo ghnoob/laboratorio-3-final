@@ -1,25 +1,27 @@
 <template>
   <h1>Resultados</h1>
-  <table class="green-table" v-if="renderTable">
-    <thead>
-      <tr>
-        <th>Criptomoneda</th>
-        <th>Resultado</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="crypto in tableData" :key="crypto.code">
-        <td>{{ crypto.name }}</td>
-        <td :class="{ red: crypto.result < 0 }">${{ crypto.result.toFixed(2) }}</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td>Total</td>
-        <td :class="{ red: totalResults < 0 }">${{ totalResults.toFixed(2) }}</td>
-      </tr>
-    </tfoot>
-  </table>
+  <div v-if="renderTable" class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="column">Criptomoneda</th>
+          <th scope="column">Resultado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="crypto in tableData" :key="crypto.code">
+          <th scope="row">{{ crypto.name }}</th>
+          <td :class="cellColor(crypto.result)">${{ crypto.result.toFixed(2) }}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="row">Total</th>
+          <td :class="cellColor(totalResults)">${{ totalResults.toFixed(2) }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
   <p v-else>No se han registrado transacciones hasta el momento.</p>
 </template>
 
@@ -82,6 +84,18 @@ export default {
         this.$toast.error(error.toString());
       }
     },
+
+    cellColor(n) {
+      if (n > 0) {
+        return 'table-success';
+      }
+
+      if (n < 0) {
+        return 'table-danger';
+      }
+
+      return '';
+    },
   },
   computed: {
     transactions() {
@@ -126,9 +140,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.red {
-  color: red;
-}
-</style>

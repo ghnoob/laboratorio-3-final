@@ -6,10 +6,15 @@ export default createStore({
       username: '',
       transactions: [],
       cryptoCodes: [
-        { code: 'btc', name: 'Bitcoin', color: '#ff9315' },
-        { code: 'dai', name: 'Dai', color: '#fd024f' },
-        { code: 'eth', name: 'Ethereum', color: '#5b73a0' },
-        { code: 'usdc', name: 'USD Coin', color: '#2775ca' },
+        {
+          id: '1', code: 'btc', name: 'Bitcoin', color: '#ff9315',
+        }, {
+          id: '4943', code: 'dai', name: 'Dai', color: '#fd024f',
+        }, {
+          id: '1027', code: 'eth', name: 'Ethereum', color: '#5b73a0',
+        }, {
+          id: '3408', code: 'usdc', name: 'USD Coin', color: '#2775ca',
+        },
       ],
       prices: [],
     };

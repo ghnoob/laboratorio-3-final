@@ -58,13 +58,25 @@ describe('Transactions.vue', () => {
       expect(cells[6].text()).toBe('1.01');
       expect(cells[7].text()).toBe('165.23');
       expect(cells[8].text()).toBe('Compra');
-      expect(cells[9].text()).toBe(new Date('2021-11-07T17:50:00.000Z').toLocaleString());
+      expect(cells[9].text()).toBe(new Date('2021-11-07T17:50:00.000Z').toLocaleString([], {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      }));
 
       expect(cells[10].text()).toBe('USD Coin');
       expect(cells[11].text()).toBe('1.01');
       expect(cells[12].text()).toBe('170.98');
       expect(cells[13].text()).toBe('Venta');
-      expect(cells[14].text()).toBe(new Date('2021-11-07T20:50:00.000Z').toLocaleString());
+      expect(cells[14].text()).toBe(new Date('2021-11-07T20:50:00.000Z').toLocaleString([], {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      }));
     });
 
     it('Solo se puede editar y eliminar si hay una transaccion seleccionada', async () => {
@@ -85,14 +97,14 @@ describe('Transactions.vue', () => {
       expect(rows.length).toBe(5);
 
       await rows[1].trigger('click');
-      expect(rows[1].attributes('class')).toBe('selected');
+      expect(rows[1].attributes('class')).toContain('bg-primary');
       expect(editButton.attributes('disabled')).toBe(undefined);
       // no se puede borrar la compra porque dejaría la cartera en negativo
       expect(deleteButton.attributes('disabled')).toBe('');
 
       await rows[0].trigger('click');
       expect(rows[1].attributes('class')).toBe('');
-      expect(rows[0].attributes('class')).toBe('selected');
+      expect(rows[0].attributes('class')).toContain('bg-primary');
 
       await rows[0].trigger('click');
       expect(rows[0].attributes('class')).toBe('');

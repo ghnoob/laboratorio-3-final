@@ -7,7 +7,7 @@ import store from './store';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
-import FontAwesomeIcon from './FontAwesomeIcon';
+import FontAwesomeIcon from './components/FontAwesomeIcon';
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {

@@ -4,7 +4,7 @@
       class="d-flex flex-column flex-grow-1 main-content"
       :class="{ 'justify-content-center' : inLoginRoute }"
     >
-      <header>
+      <header class="position-sticky top-0">
         <div v-if="isLoggedIn">
           <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
